@@ -4,7 +4,7 @@
             <NavigationBar/>
                 <div class="grid grid-cols-3 gap-4 flex min-w-full my-8">
                 <div></div>
-                <div class="grid grid-cols-1 gap-4 flex min-w-full my-8 md:col-span-1 lg:col-span-1 col-span-3">
+                <div class="grid grid-cols-1 gap-4 flex min-w-full my-8 md:col-span-3 lg:col-span-1 col-span-3">
                 <form @submit.prevent>
                     <div>  </div>
                     <div class="bg-5 rounded-2xl text-center items-center justify-center">
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                     <div id="error message" v-if="error">
-                        <div class="my-4 mx-2 bg-red-200 rounded-xl lg:my-4 sm:my-6">
+                        <div class="my-4 mx-2 bg-red-200 rounded-xl lg:my-4  sm:my-6">
                             <div class="rounded-md bg-red-200 shadow-md  -space-y-px ">
                                
                                 <span class="text-bold text-3xl text-left font-bold text-red-600 "><div v-for="(value, name) in error" :key="name">
