@@ -24,7 +24,13 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('@/views/Login.vue')
-  }
+  },
+	{
+		path: '/chat/:name',
+		name: 'Chat',
+		component: () => import('@/views/Chat.vue'),
+		props: true,
+	}
 ]
 
 const router = createRouter({
