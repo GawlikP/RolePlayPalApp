@@ -30,6 +30,12 @@ const routes = [
 		name: 'Chat',
 		component: () => import('@/views/Chat.vue'),
 		props: true,
+	},
+  {
+		path: '/forum/:page',
+		name: 'Forum',
+		component: () => import('@/views/Forum.vue'),
+		props: true,
 	}
 ]
 

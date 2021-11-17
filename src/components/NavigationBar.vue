@@ -7,14 +7,14 @@
           Role Play Pal
         </a>
         <button class="text-white color-pink-800 cursor-pointer text-xl leading-none px-3 py-1 border border-solid  rounded block lg:hidden outline-none focus:outline-none" type="button" v-on:click="toggleNavbar()">
-          <i class="fas fa-bars"></i>
+          =
         </button>
       </div>
       <div v-bind:class="{'hidden': !showMenu, 'flex': showMenu}" class="lg:flex lg:flex-grow items-center">
         <ul class="flex flex-col lg:flex-row list-none ml-auto">
           <li class="nav-item">
             <a class="px-3 py-2 flex items-center text-xl uppercase font-bold leading-snug text-white hover:opacity-75" >
-              <i class="fas fa-home" style="bold"></i><router-link to="/">Główna</router-link> 
+              <i class="fas fa-home" style="bold"></i><router-link to="/forum/1">Forum</router-link> 
             </a>
           </li>
           <li class="nav-item">

@@ -13,7 +13,7 @@ export default{
     name: 'CommentViewComponent',
     props: {
         post_absolute_url: String,
-        user: String,
+        user: Number,
         user_username: String,
         content: String,
     },
