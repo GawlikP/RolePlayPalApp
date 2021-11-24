@@ -112,6 +112,7 @@ export default({
                     console.log(response);
                     this.ok = true;
                     this.$store.commit({type:'logUser', token:response['auth_token'], username:this.username})
+                    console.log(this.$store.state.user.isAuthenticated)
             }))
             .catch(err => {
                 
