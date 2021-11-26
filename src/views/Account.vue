@@ -31,7 +31,7 @@
                                             </div>
                                             </div>
                                         </div>
-                                        <div class="flex iems-center justify-center min-w-full lg:my-1 sm:my-8">
+                                        <div class="flex items-center justify-center min-w-full lg:my-1 sm:my-8">
                                             <button type="submit" v-on:click="updateProfile()" class="my-4 mx-4  sm:py-4  rounded-xl min-w-full bg-white border border-purple-600 boreder-1 items-center justify-center bg-purple-600  text-gray-200 hover:bg-purple-600 lg:text-2xl sm:text-xl font-bold shadow-md">  
                                                 <span type="text"  > Ustaw dane konta </span> 
                                             </button>
@@ -255,7 +255,7 @@ export default{
                         method: "GET",
                         headers: {"Authorization": `Token ${this.$store.state.user.token}`},
                     }
-                   fetch(`http://localhost:8000/api/profiles/${user}/`,requestOptions)
+                   fetch(`http://localhost:8000/api/profiles/me/`,requestOptions)
                     .then((res => {
                         if(res.status == 200){
                             return res.json()
@@ -324,7 +324,7 @@ export default{
                         headers: {"Content-Type": "application/json", "Authorization": `Token ${this.$store.state.user.token}`},
                         body: JSON.stringify({description: this.profile.description, note: this.profile.note, role: this.profile.role})
                     } 
-                    fetch(`http://localhost:8000/api/profiles/${this.$store.state.user.username}/`, requestOptions)
+                    fetch(`http://localhost:8000/api/profiles/me/`, requestOptions)
                     .then((res =>{
                         if(res.status == 200){
                             return res.json()
@@ -359,7 +359,7 @@ export default{
                 headers: {"Authorization": `Token ${this.$store.state.user.token}`},
                 body: fd
             }
-            fetch(`http://localhost:8000/api/profiles/${this.$store.state.user.username}/`,requestOptions)
+            fetch(`http://localhost:8000/api/profiles/me/`,requestOptions)
             .then((res => {
                 if(res.status == 200){
                     return res.json()

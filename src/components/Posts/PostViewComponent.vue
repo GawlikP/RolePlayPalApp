@@ -1,8 +1,9 @@
 <template>
     <div id="PostViewComponent" >
         <div class="container fluid px-3 min-w-full min-h-10 px-2 py-2 shadow-md   border border-gray-600 rounded-xl ">
-            <p> ID: {{id}} </p>
-            <p class="font-bold break-all min-w-full text-purple-900" > <i class="fas fa-user"></i> {{author_username}} </p>
+        
+            <p></p> 
+            <p class="font-bold break-all min-w-full text-purple-900" > <ProfileIcon v-bind:user_id="author" />  {{author_username}} </p>
             <p class="break-all text-center font-bold text-xl text-gray-100 min-w-full bg-black rounded-xl "> T: {{title}}  </p>
             <p class="break-all mx-1 py-2"> {{content}}  </p>
               <PostReactionsComponent v-bind:pluses="pluses" v-bind:minuses="minuses" v-bind:absolute_url="absolute_url" />
@@ -15,6 +16,7 @@
 import PostReactionsComponent from '@/components/Posts/PostReactionsComponent.vue'
 //import CommentViewComponent from '@/components/Posts/Comments/CommentViewComponent.vue'
 import PostCommentsComponent from '@/components/Posts/Comments/PostCommentsComponent.vue'
+import ProfileIcon from '@/components/Profiles/ProfileIconComponent.vue'
 export default {
   name: 'PostViewComponent',
   props: {
@@ -29,8 +31,8 @@ export default {
   },
   components:{
     PostReactionsComponent,
-    
-    PostCommentsComponent
+    PostCommentsComponent,
+    ProfileIcon
   }
 }
 </script>

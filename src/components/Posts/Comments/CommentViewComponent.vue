@@ -1,14 +1,15 @@
 <template>
 
     <div id="CommentViewComponent" class="fluid min-w-full min-h-10 px-4 py-3 shadow-md border border-purple-600 rounded-xl">
-        <p class="font-bold"> {{user_username}}</p>
-        <p class=" text-gray-700 text-xs font-bold"> Date: dsafsdafdsafdsaf </p>
-        <p class="text-xl font-bold"> {{content}} </p>
+        <p class="font-bold"> <ProfileIcon v-bind:user_id="user" />   {{user_username}}</p>
+        <p class=" text-gray-700 text-xs my-2 font-bold"> Date: {{created}} </p>
+        <p class="text-sm font-bold mx-2"> {{content}} </p>
     </div>
 
 </template>
 
 <script>
+import ProfileIcon from '@/components/Profiles/ProfileIconComponent.vue'
 export default{
     name: 'CommentViewComponent',
     props: {
@@ -16,36 +17,22 @@ export default{
         user: Number,
         user_username: String,
         content: String,
+        created: String,
     },
     data(){
         return {
-            comments: []
+
         }
     },
     mounted() {
 
     },
     methods: {
-        getComments(){
-              const requestOptions = {
-              method: "GET",
-              headers: {"Content-Type":"application/json",
-                        "Authorization": `Token ${this.$store.state.user.token}`}
-          }
-          fetch(`http://localhost:8000/api/posts${this.absolute_url}comments/`, requestOptions)
-          .then((res=>{
-              if(res.status == 200) return res.json()
-              else throw res
-          }))
-          .then((response =>{
-     
-              this.comments = response;
-              
-          }))
-          .catch(err=> {
-              console.log(err)
-          })
-        }
+      
+    },
+    components:{
+      
+        ProfileIcon
     }
 }
 </script>

@@ -29,10 +29,14 @@
           </li>
           <li class="nav-item">
             <a class="px-3 py-2 flex items-center text-xl uppercase font-bold leading-snug text-white hover:opacity-75" >
-             <i class="far fa-user-circle"></i><router-link to="/register">Rejestracja</router-link>
+             <i class="fas fa-sign-in-alt"></i><router-link to="/register">Rejestracja</router-link>
             </a>
           </li>
-         
+          <li v-if="$store.state.user.isAuthenticated" class="nav-item">
+            <a class="px-3 py-2 flex items-center text-xl uppercase font-bold leading-snug text-white hover:opacity-75" >
+             <i class="far fa-user-circle"></i><router-link to="/account">Moje konto</router-link>
+            </a>
+          </li>
         </ul>
       </div>
     </div>

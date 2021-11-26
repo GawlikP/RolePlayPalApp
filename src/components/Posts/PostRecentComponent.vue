@@ -65,6 +65,9 @@ export default {
         this.getPosts()
         
     },
+    watch:{
+        '$route': 'getPosts'
+    },
     methods :{
             getPosts: function(){
                 this.error = "";
@@ -87,7 +90,6 @@ export default {
                     //console.log(response);
                     this.ok = true;
                     this.fetched_data = response;
-                    console.log(this.fetched_data)
             }))
             .catch(err => {
                 err.json().then(json => {

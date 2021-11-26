@@ -42,7 +42,7 @@
                         <div class="my-4 mx-2  rounded-xl lg:my-4 sm:my-6">
                             <div class="rounded-md grid grid-cols-2 gap-4 shadow-md text-center -space-y-px ">
                             <div>    
-                                <p class="text-bold text-3xl text-center ">   <i class="far fa-user-circle"></i> </p>
+                                <p class="text-bold text-3xl text-center ">   <i class="fas fa-sign-in-alt"></i></p>
                             </div>
                             <div>
                                 <p class="text-bold text-3xl text-center "> <i class="fas fa-question-circle "></i>   </p>
