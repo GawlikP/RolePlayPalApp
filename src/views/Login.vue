@@ -1,7 +1,7 @@
 <template>
     <div id="Login">
         <div class="container  min-h-screen min-w-full items-center justify-center" >
-            <NavigationBar/>
+            <NavigationBar :key="componentKey" />
                 <div class="grid grid-cols-3 gap-4 flex min-w-full my-8">
                 <div></div>
                 <div class="grid grid-cols-1 gap-4 flex min-w-full my-8 md:col-span-3 lg:col-span-1 col-span-3">
@@ -87,6 +87,7 @@ export default({
             username: "",
             password: "",
             error: "",
+            componentKey: 0,
             ok: false, 
         }
     },
@@ -111,6 +112,7 @@ export default({
             .then((response => {
                     console.log(response);
                     this.ok = true;
+                    this.componentKey += 1; 
                     this.$store.commit({type:'logUser', token:response['auth_token'], username:this.username})
                     console.log(this.$store.state.user.isAuthenticated)
             }))

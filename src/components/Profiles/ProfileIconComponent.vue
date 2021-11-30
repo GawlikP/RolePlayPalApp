@@ -1,11 +1,8 @@
 <template>
     <div class="flex space-x-2" id="ProfileIcon" v-on:click="$router.push(`/profile/${profile.slug}`)" >
-        <div v-if="!ok">
-            <i class="fas fa-user"></i> 
-        </div>
-        <div v-if="ok" class="relative w-12 h-12">
-                <img class="rounded-full border border-gray-100 shadow-sm" :src="profile.get_thumbnail" alt="user image" />
-                    <div class="absolute top-0 right-0 h-3 w-3 my-1 border-2 border-white rounded-full bg-green-400 z-2"></div>
+
+        <div class="relative w-12 h-12 inline-block">
+            <i v-if="!ok" class="text-4xl text-center font-bold  min-w-full fas fa-user"></i><img  v-if="ok" class="w-12 h-12 mx-auto rounded-full" :src="profile.get_thumbnail" alt="user image" />   
         </div>
     </div>
 </template>
@@ -51,7 +48,7 @@ export default({
             .then((res =>{
                 this.ok = true;
                 this.profile = res;
-                console.log(this.profile);
+           
             }))
             .catch(err =>{
                 try{

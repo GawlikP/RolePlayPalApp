@@ -2,7 +2,7 @@
     <div id="PostCommentsComponent">
         
              <div v-on:click="changeFormDown()" >
-                <p  class=" font-bold lg:text-xl md:text-xl sm:text-md text-center   placeholder-gray-600 text-purple-700"> <i v-if="!isFormDown" class="fas fa-chevron-circle-down" ></i> <i v-if="isFormDown" class="fas fa-chevron-circle-up" ></i>  Pokaż komentarze </p>
+                <p  class=" font-bold lg:text-xl md:text-xl sm:text-md text-center   placeholder-gray-600 text-purple-900"> <i v-if="!isFormDown" class="fas fa-chevron-circle-down" ></i> <i v-if="isFormDown" class="fas fa-chevron-circle-up" ></i>  Pokaż komentarze </p>
             </div> 
                     <div v-bind:class="{'hidden': !isFormDown, 'flex': isFormDown}"  class="grid grid-cols-1   min-w-full " > 
                         <CommentFormComponent  v-bind:post_absolute_url="post_absolute_url" />
@@ -32,7 +32,7 @@ export default{
         }
     },
     created() {
-        this.getComments();
+        
     },
     watch:{
         '$route':'getComments' 
@@ -40,6 +40,7 @@ export default{
     methods: {
          changeFormDown(){
           this.isFormDown = !this.isFormDown;
+          this.getComments();
       },
         getComments(){
               const requestOptions = {

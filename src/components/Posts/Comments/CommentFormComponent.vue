@@ -1,6 +1,6 @@
 <template>
     <div id="CommentFormComponent"> 
-        <div class="fluid mx-3 px-3 min-h-5 shadow-md bg-purple-200    border border-purple-700 rounded-xl ">
+        <div class="fluid mx-3 px-3 min-h-5 shadow-md bg-purple-200    rounded-xl ">
                 <form @submit.prevent >
                 <div v-on:click="changeFormDown()"  >
                             <p  class="font-bold lg:text-xl md:text-xl sm:text-md text-center    text-gray-800"> <i v-if="!isFormDown" class="fas fa-chevron-circle-down" ></i> <i v-if="isFormDown" class="fas fa-chevron-circle-up" ></i>  Dodaj nowy komentarz </p>

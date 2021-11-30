@@ -9,30 +9,9 @@
             <div class="my-1" ></div>
         </div>
     </div>
-     <div id="PostPaginationComponent">
-        
-            <div  class="grid grid-cols-5 gap-2 py-1 min-w-full my-1">
-                    <div></div>
-                        <div class="flex min-w-full my-1 col-span-5 xl:col-span-3 lg:col-span-3 md:col-span-5 sm:col-span-5  centered items-center justify-center "> 
-                            <div v-if="page_number != '1'">
-                                 <a  :href="'/forum/' +String( parseInt(page_number)-1)" class="w-full px-5 py-2 rounded-xl bg-white border border-purple-800 boreder-1  bg-purple-800  text-gray-200 hover:bg-purple-600 lg:text-2xl sm:text-xl font-bold shadow-md">  
-                                        Previous Page
-                                    </a>
-                            </div>
-                            <div v-if="fetched_data.next_page == true">
-                                    <a  :href="'/forum/' +String( parseInt(page_number)+1)" class="w-full px-5 py-2 rounded-xl bg-white border border-purple-800 boreder-1  bg-purple-800  text-gray-200 hover:bg-purple-600 lg:text-2xl sm:text-xl font-bold shadow-md">  
-                                        Next Page
-                                    </a>
-                            </div>
-                            
-                        </div>
-                    <div> 
-                </div>
-            </div>
-     
-       
-       
-    </div>
+  <div  v-if="ok"  >
+        <PostPaginationComponent v-bind:page_numbers="fetched_data.page_numbers" v-bind:act_page="page_number"/>
+ </div>
     <div v-if="error.length > 0">
         <div class="min-w-full my-1  xl:col-span-3 lg:col-span-3 md:col-span-5 sm:col-span-5 ">
              <div class="container fluid mx-3 min-w-full min-h-10 px-2 py-2 items-center justify-center shadow-md text-3xl font-bold  border border-gray-600 rounded-xl ">
@@ -90,11 +69,15 @@ export default {
                     //console.log(response);
                     this.ok = true;
                     this.fetched_data = response;
+                    console.log(this.fetched_data);
             }))
             .catch(err => {
-                err.json().then(json => {
-                    this.error = json
-                });
+                 try{
+                    this.error = err.json().toString()
+                }
+                catch(e){
+                    this.error = err;
+                }
             })
             }
     },

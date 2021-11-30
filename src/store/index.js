@@ -23,8 +23,16 @@ export default createStore({
     logUser(state, dat) {
       state.user.token = dat.token
       state.user.username = dat.username
+      state.user.isAuthenticated = true;
       localStorage.setItem('token', dat.token);
       localStorage.setItem('username', dat.username);
+    },
+    logOutUser(state){
+      state.user.token = null;
+      state.user.username = null;
+      state.user.isAuthenticated = false;
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
     }
   },
   actions: {

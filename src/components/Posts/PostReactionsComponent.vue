@@ -2,8 +2,9 @@
     <div id="PostReactionsComponent">
         <div v-if="my_reaction.id">
           <p class="text-center font-bold text-xl"  > 
-            <button v-bind:class="{'text-red-700 bg-red-400': !my_reaction.state,  'hover:text-red-100': my_reaction.state}"  class="rounded  border border-1 border-red-400  px-4 hover:text-red-100 hover:bg-red-700">-</button>
-            <button  v-bind:class="{'text-green-700 bg-green-400': my_reaction.state,  'hover:text-green-100': !my_reaction.state}"   class="rounded border border-1 border-green-400   px-4 hover:text-green-100 hover:bg-green-700">+</button> 
+            
+            <button v-bind:class="{'text-red-700 bg-red-400': my_reaction.state,  'hover:text-red-100': !my_reaction.state}"  class="rounded  border border-1 border-red-400  px-4 hover:text-red-100 hover:bg-red-700">-</button>
+            <button  v-bind:class="{'text-green-700 bg-green-400': !my_reaction.state,  'hover:text-green-100': my_reaction.state}"   class="rounded border border-1 border-green-400   px-4 hover:text-green-100 hover:bg-green-700">+</button> 
            {{pluses - minuses}} </p>
         </div>
         <div v-else>

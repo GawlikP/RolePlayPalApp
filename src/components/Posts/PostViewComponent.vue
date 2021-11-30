@@ -1,6 +1,6 @@
 <template>
     <div id="PostViewComponent" >
-        <div class="container fluid px-3 min-w-full min-h-10 px-2 py-2 shadow-md   border border-gray-600 rounded-xl ">
+        <div class="container fluid px-3 min-w-full min-h-10 px-2 py-2 shadow-xl   rounded-xl ">
         
             <p></p> 
             <p class="font-bold break-all min-w-full text-purple-900" > <ProfileIcon v-bind:user_id="author" />  {{author_username}} </p>

@@ -1,6 +1,6 @@
 <template>
     <div id="PostFormComponent"> 
-        <div class="container fluid mx-3 min-w-full min-h-5 shadow-md   border border-purple-700 rounded-xl ">
+        <div class="container fluid mx-3 min-w-full min-h-5 shadow-md    rounded-xl ">
                 <form @submit.prevent >
                 <div v-on:click="changeFormDown()" >
                             <p  class=" font-bold lg:text-3xl md:text-xl sm:text-xl text-center   placeholder-gray-600 text-gray-900"> <i v-if="!isFormDown" class="fas fa-chevron-circle-down" ></i> <i v-if="isFormDown" class="fas fa-chevron-circle-up" ></i>  Dodaj nowy post </p>
@@ -19,7 +19,7 @@
                             <div class=" mx-2  rounded-xl items-center justify-center">
                             <div class="rounded-md shadow-md -space-y-px my-1">    
                                 <label for="Content" class=" font-bold lg:text-3xl md:text-xl sm:text-xl text-center  block placeholder-gray-600 text-gray-900"> Tekst </label>
-                                <textarea name="content" v-model="post.content" class="form-textarea mt-1 block w-full lg:text-2xl md:text-xl sm:text-md" rows="3" placeholder="Enter some long form content."></textarea>
+                                <textarea name="content" v-model="post.content" class="form-textarea mt-1 rounded-md hover:border-purple-700 block w-full lg:text-2xl md:text-xl sm:text-md" rows="3" placeholder="Enter some long form content."></textarea>
                             </div>
                             </div>
                         </div>

@@ -80,7 +80,13 @@ import NavigationBar from '../components/NavigationBar.vue'
                             this.loading = false;
                     }))
                     .catch(err => {
-                        this.error = err.json().toString()
+                         try{
+                            this.fetch_error = err.json().toString()
+                        }
+                        catch(e)
+                        {
+                            this.fetch_error = err;
+                        }
                     })
             }
         }

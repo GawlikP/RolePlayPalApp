@@ -1,12 +1,12 @@
 <template>
     <div id="PostPaginationComponent">
-        <div v-if="loading == true">
+        <div v-if="!loading">
             <div  class="grid grid-cols-5 gap-2 py-1 min-w-full my-1">
                     <div></div>
                         <div class="flex min-w-full my-1 col-span-5 xl:col-span-3 lg:col-span-3 md:col-span-5 sm:col-span-5  centered items-center justify-center "> 
-                            <div class="lg:my-1 sm:my-8" v-for="index in end_page" :key="index">    
-                                    <a  :href="'/forum/' +index" class="w-full px-5 py-2 rounded-xl bg-white border border-purple-800 boreder-1  bg-purple-800  text-gray-200 hover:bg-purple-600 lg:text-2xl sm:text-xl font-bold shadow-md">  
-                                        {{index + start_page-1 }} 
+                            <div class="lg:my-1 sm:my-8" v-for="index in max_page" :key="index">    
+                                    <a  :href="'/forum/' + (parseInt(index) + start_page-1)" v-bind:class="{'text-gray-100 bg-purple-800': parseInt(index)+start_page -1==parseInt(act_page)}" class="w-full px-5 py-2 rounded-xl    hover:bg-purple-600 lg:text-2xl sm:text-xl font-bold shadow-xl" >  
+                                        {{parseInt(index) + parseInt(start_page-1)}} 
                                     </a>
                             </div>
                         </div>
@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="loading == false" >
+        <div v-if="loading" >
              <div  class="grid grid-cols-5 gap-2 py-1 min-w-full my-1">
                  <div></div>
                     <div class="flex min-w-full my-1 col-span-5 xl:col-span-3 lg:col-span-3 md:col-span-5 sm:col-span-5  centered items-center justify-center ">
@@ -35,25 +35,38 @@ export default ({
       act_page: String
     
   },
-  mounted(){
-        console.log(this.loading)
-        if(parseInt(this.page_numbers) < this.max_page){
-            this.start_page = 1;
-            this.end_page = this.page_numbers;
-        }
-        if(parseInt(this.page_numbers) > this.max_page){
-            this.start_page = parseInt(this.page_numbers) - this.max_page
-            this.end_page =this.start_page + this.max_page
-        }
-        this.loading = true;
-        console.log(this.loading)
-  },
+   created() {
+        this.setPages();
+    },
+    watch:{
+        '$route':'setPages' 
+    },
+    methods: {
+            setPages(){
+                this.loading = true;
+                this.page_numbers 
+  
+
+                if(this.page_numbers < this.max_page)
+                {
+                    this.start_page = 1;
+                    this.max_page = this.page_numbers;
+                }else{
+                    // ((a < b) ? 'minor' : 'major');
+                    this.start_page = ((parseInt(this.act_page) - this.page_offset < 1)? 1: this.act_page- this.page_offset) 
+                    this.max_page = ((parseInt(this.act_page) + this.page_offset > this.page_numbers)? this.page_numbers - this.start_page +1 : this.end_page)
+                }
+          
+                this.loading = false;
+            }
+    },
    data(){
         return {
             start_page: 1,
-            end_page: -1,
-            max_page: 5,
-            loading:false
+            end_page: 7,
+            max_page: 7,
+            loading:true,
+            page_offset: 3,
         }
     },
   })  

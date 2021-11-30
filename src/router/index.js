@@ -48,7 +48,18 @@ const routes = [
     path: '/account',
     name: 'Account',
     component: () => import('@/views/Account')
-  }
+  },
+  {
+    path: '/games',
+    name: 'Games',
+    component: () => import('@/views/Games')
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: () => import('@/views/Logout')
+  },
+
 ]
 
 const router = createRouter({
@@ -58,9 +69,15 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   
-  if (to.name !== 'Login' && !store.state.user.isAuthenticated) next({ name: 'Login' })
-
+  if (to.name !== 'Login' && to.name !=='Register' && !store.state.user.isAuthenticated) { 
+      next({
+        path: 'login',
+        replace: true
+      })
+  }
+  else {
   next()
+  }
 });
 
 export default router
