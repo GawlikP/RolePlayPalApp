@@ -5,30 +5,31 @@
             <div class="grid grid-cols-5 gap-4 flex min-w-full my-1">
                 <div></div>
                 <div class="grid grid-cols-1 gap-2flex min-w-full my-1 px-1 md:col-span-5 lg:col-span-3 col-span-5">
+                    <ul id="tabs" class="inline-flex w-full px-1 pt-2 ">
+                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='games',  'text-gray-800': filter!=='games'}" class="px-4 py-2 -mb-px font-semibold  rounded-t " v-on:click="state='games'">Gry</li>
+                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='invitations',  'text-gray-800': filter!=='invitations'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="state='invitations'" >Zaproszenia</li>
+                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='create_game',  'text-gray-800': filter!=='create_game'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="state='create_game'" >Stwórz rozgrywkę</li>
+                        </ul>
                     <div v-if="loading">
                         <p class="text-3xl text-left font-bold "> Please Wait... </p>
                     </div>
                      <div v-if="!loading && state=='games'">
-                        <div class="text-xl text-left font-bold min-w-full grid grid-cols-1" id="rows" v-for="(game, index) in games" v-bind:key="index" >
+                        
                            
-                            <GameCardViewComponent 
-                                v-bind:id="game.id"
-                                v-bind:name="game.name"
-                                v-bind:slug="game.slug"
-                                v-bind:edited="game.edited"
-                                v-bind:created="game.created"
-                                v-bind:game_master="game.game_master"
-                                v-bind:next_game="game.next_game"
-                                v-bind:description="game.description"
-                                v-bind:players="game.players"
-                            />
-                        </div>
-                        <div v-if="!loading && state=='invitations'">
-                            <div class="text-xl text-left font-bold min-w-full grid grid-cols-1">
-
-                            </div>
-                        </div>
+                           <GamesComponent />
+                        
                     </div>
+                    <div v-if="!loading && state=='invitations'">
+                            <div class="text-xl text-left font-bold min-w-full grid grid-cols-1">
+                                    <InvitationsComponent  />
+                            </div>
+                    </div>
+                    <div v-if="!loading && state=='create_game'">
+                            <div class="text-xl text-left font-bold min-w-full grid grid-cols-1">
+                                    <GameCreationComponent  />
+                            </div>
+                    </div>
+                    
                 </div>
                 <div></div>
             </div>
@@ -38,7 +39,9 @@
 <script>
 import NavigationBar from '../components/NavigationBar.vue'
 import GameCardViewComponent from '@/components/Games/GameCardViewComponent'
-
+import InvitationsComponent from '@/components/Games/InvitationsComponent'
+import GamesComponent from '@/components/Games/GamesComponent'
+import GameCreationComponent from '@/components/Games/GameCreationComponent'
 export default ({
     name: 'Games',
     data(){
@@ -51,10 +54,14 @@ export default ({
     },
     created(){
             // fetching method here
-            this.fetchGames()
+            //this.fetchGames()
     },
     watch: {
-        '$route': 'fetchGames'
+        '$route': 'fetchGames',
+        state: function (val) {
+            this.loading = true;
+            this.loading = false;
+        }
     },
     methods: {
         fetchGames() {
@@ -86,11 +93,15 @@ export default ({
                             this.error = err;
                         }
             }))
+            
         }
     },
     components: {
         NavigationBar,
-        GameCardViewComponent
+        GameCardViewComponent,
+        InvitationsComponent,
+        GamesComponent,
+        GameCreationComponent
     },
 })
 </script>

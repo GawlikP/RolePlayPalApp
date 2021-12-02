@@ -122,6 +122,7 @@ export default({
                     this.error = json
                 });
             })
+          
             //this.$store.commit({type: 'logUser', token: this.token, username: this.username})
         }
     }

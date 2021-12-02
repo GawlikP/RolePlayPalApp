@@ -6,8 +6,10 @@
             </div> 
                     <div v-bind:class="{'hidden': !isFormDown, 'flex': isFormDown}"  class="grid grid-cols-1   min-w-full " > 
                         <CommentFormComponent  v-bind:post_absolute_url="post_absolute_url" />
-                         <div v-for="comment in comments" v-bind:key="comment.id" >
-                            <CommentViewComponent v-bind:post_absolute_url="post_absolute_url" v-bind:user="comment.user" v-bind:user_username="comment.user_username" v-bind:content="comment.content" v-bind:created="comment.created" />
+                        <div class="my-3 ">
+                            <div v-for="comment in comments" v-bind:key="comment.id" >
+                                <CommentViewComponent v-bind:post_absolute_url="post_absolute_url" v-bind:user="comment.user" v-bind:user_username="comment.user_username" v-bind:content="comment.content" v-bind:created="comment.created" />
+                            </div>
                         </div>
                     </div>
         </div>

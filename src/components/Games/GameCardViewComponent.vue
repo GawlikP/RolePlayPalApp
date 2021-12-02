@@ -8,6 +8,9 @@
         <p class="text-gray-700 text-base">
         Opis:  {{this.description}}
         </p>
+        <p class="text-gray-900 text-xl py-1">
+         Gracze: 
+        </p>
       </div>
       <div class="flex px-6 pt-4 pb-2">
         <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-gray-700 mr-2 mb-2" id="players" v-for="(player, index) in players" v-bind:key="index" >
