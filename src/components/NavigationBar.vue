@@ -1,6 +1,6 @@
 <template>
 
-<nav class="relative flex flex-wrap items-center justify-between  py-4 bg-black ">
+<nav class="sticky mt-0  w-full z-10 top-0 items-center justify-between  py-4 bg-black ">
     <div class="container mx-2 flex flex-wrap items-center justify-between">
       <div class="w-full relative flex justify-between lg:w-auto px-4  lg:static lg:block lg:justify-start">
         <a class="lg:text-2xl sm:text-xl font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white" >
@@ -39,7 +39,7 @@
           </li>
           <li v-if="$store.state.user.isAuthenticated" class="nav-item">
             <a class="px-3 py-2 flex items-center text-xl uppercase font-bold leading-snug text-white hover:opacity-75" >
-             <i class="fas fa-dice-d6"></i><router-link to="/games">Rozgrywki</router-link>
+             <i class="fas fa-dice-d6"></i><router-link to="/games/1">Rozgrywki</router-link>
             </a>
           </li>
           <li v-if="$store.state.user.isAuthenticated" class="nav-item">

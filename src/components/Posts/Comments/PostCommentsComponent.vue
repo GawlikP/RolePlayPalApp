@@ -5,7 +5,7 @@
                 <p  class=" font-bold lg:text-xl md:text-xl sm:text-md text-center   placeholder-gray-600 text-purple-900"> <i v-if="!isFormDown" class="fas fa-chevron-circle-down" ></i> <i v-if="isFormDown" class="fas fa-chevron-circle-up" ></i>  Pokaż komentarze </p>
             </div> 
                     <div v-bind:class="{'hidden': !isFormDown, 'flex': isFormDown}"  class="grid grid-cols-1   min-w-full " > 
-                        <CommentFormComponent  v-bind:post_absolute_url="post_absolute_url" />
+                        <CommentFormComponent  v-bind:post_absolute_url="post_absolute_url" @updateComments="getComments" />
                         <div class="my-3 ">
                             <div v-for="comment in comments" v-bind:key="comment.id" >
                                 <CommentViewComponent v-bind:post_absolute_url="post_absolute_url" v-bind:user="comment.user" v-bind:user_username="comment.user_username" v-bind:content="comment.content" v-bind:created="comment.created" />

@@ -55,6 +55,7 @@ export default {
       post_absolute_url: String,
 
   },
+  emits: ["updateComments"],
   data ()  {
       return {
         isFormDown: false,
@@ -96,6 +97,7 @@ export default {
             .then((response => {
                     console.log(response);
                     this.ok = true;
+                    this.$emit("updateComments");
             }))
             .catch(err => {
                 

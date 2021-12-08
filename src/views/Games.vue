@@ -6,9 +6,9 @@
                 <div></div>
                 <div class="grid grid-cols-1 gap-2flex min-w-full my-1 px-1 md:col-span-5 lg:col-span-3 col-span-5">
                     <ul id="tabs" class="inline-flex w-full px-1 pt-2 ">
-                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='games',  'text-gray-800': filter!=='games'}" class="px-4 py-2 -mb-px font-semibold  rounded-t " v-on:click="state='games'">Gry</li>
-                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='invitations',  'text-gray-800': filter!=='invitations'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="state='invitations'" >Zaproszenia</li>
-                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='create_game',  'text-gray-800': filter!=='create_game'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="state='create_game'" >Stwórz rozgrywkę</li>
+                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='games',  'text-gray-800': state!=='games'}" class="px-4 py-2 -mb-px font-semibold  rounded-t " v-on:click="state='games'">Gry</li>
+                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='invitations',  'text-gray-800': state!=='invitations'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="state='invitations'" >Zaproszenia</li>
+                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='create_game',  'text-gray-800': state!=='create_game'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="state='create_game'" >Stwórz rozgrywkę</li>
                         </ul>
                     <div v-if="loading">
                         <p class="text-3xl text-left font-bold "> Please Wait... </p>
@@ -16,7 +16,7 @@
                      <div v-if="!loading && state=='games'">
                         
                            
-                           <GamesComponent />
+                           <GamesComponent v-bind:page="page"/>
                         
                     </div>
                     <div v-if="!loading && state=='invitations'">
@@ -33,6 +33,7 @@
                 </div>
                 <div></div>
             </div>
+            <GamesPaginationComponent />
         </div>
     </div>
 </template>
@@ -42,14 +43,20 @@ import GameCardViewComponent from '@/components/Games/GameCardViewComponent'
 import InvitationsComponent from '@/components/Games/InvitationsComponent'
 import GamesComponent from '@/components/Games/GamesComponent'
 import GameCreationComponent from '@/components/Games/GameCreationComponent'
+
 export default ({
     name: 'Games',
     data(){
         return {
+            page: this.$route.params.page,
             games: [],
+            fetched_data: [],
+            page_numbers: 0,
             loading: false,
             error: "",
-            state: "invitations",
+            state: "games",
+            pages_loading: true,
+            pages: -1,
         }
     },
     created(){
@@ -58,12 +65,13 @@ export default ({
     },
     watch: {
         '$route': 'fetchGames',
-        state: function (val) {
-            this.loading = true;
-            this.loading = false;
-        }
+        
     },
     methods: {
+        setPages(pages){
+                this.pages = pages;
+                this.pages_loading =false;
+        },
         fetchGames() {
             this.error = "";
             this.loading = true;
@@ -81,7 +89,9 @@ export default ({
             }))
             .then((res=> {
                 this.ok = true;
-                this.games = res;
+                this.fetched_data= res;
+                this.games = this.fetched_data.games;
+                this.page_numbers = this.fetched_data.page_numbers;
                 this.loading = false;
             }))
             .catch((err=>{
@@ -101,7 +111,8 @@ export default ({
         GameCardViewComponent,
         InvitationsComponent,
         GamesComponent,
-        GameCreationComponent
+        GameCreationComponent,
+   
     },
 })
 </script>

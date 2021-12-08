@@ -1,17 +1,18 @@
 <template>
     <div id="Profile" >
             <NavigationBar />
-        <div class="container  min-w-full my-1 py-1 centered justify-center grid grid-cols-1">
+    <main >
+        <div class="container z-40 min-w-full my-1 py-1 centered justify-center grid grid-cols-1">
             <div class="grid grid-cols-5 gap-2 py-1 flex min-w-full my-1">
                      <div></div>
-                    <div class="text-center justify-center min-w-full my-1 col-span-5 xl:col-span-3 lg:col-span-3 md:col-span-5 sm:col-span-5"> 
-                            <p class="font-bold text-2xl text-purple-800 my-1 py-3 rounded rounded-2xl border border-2 bg-gray-300 "> Oto ustawienia twojego konta</p>
-                           <div   class="font-bold text-2xl text-purple-900 my-4  rounded rounded-2xl border border-2 bg-gray-300 "> 
+                    <div class="text-center justify-center min-w-full my-1 col-span-5 xl:col-span-3 lg:col-span-3 md:col-span-5 sm:col-span-5 "> 
+                            <p class="font-bold text-2xl text-purple-100 my-1 py-3 rounded rounded-2xl border border-2 bg-black "> Oto ustawienia twojego konta</p>
+                           <div   class="font-bold text-2xl text-purple-900 my-4  rounded rounded-2xl border border-2 border-purple-600 bg-white "> 
                                 <p v-if="!profile_exists" class="text-red-700"> Nie stworzyłeś jeszcze swojego profilu! </p>
                                 <p v-if="profile_exists" class="text-green-700"> Profil istnieje! </p>
 
                             </div>
-                           <div v-bind:class="{'hover:bg-purple-800 hover:text-gray-200': !dropAccount}"  class="font-bold text-2xl text-purple-900 my-4  rounded rounded-2xl border border-2 bg-gray-300 "> 
+                           <div v-bind:class="{'hover:bg-purple-800 hover:text-gray-200': !dropAccount}"  class="font-bold text-2xl text-purple-900 my-4  rounded rounded-2xl border border-2 border-purple-600 bg-white shadow-lg"> 
                                 <p v-on:click="this.dropAccount = !this.dropAccount"> Ustaw Profil </p>
                                  <form @submit.prevent >
                                     <div v-bind:class="{'hidden': !dropAccount, 'flex': dropAccount}"  class="grid grid-cols-1   min-w-full " >
@@ -19,7 +20,7 @@
                                             <div class=" mx-2  rounded-xl items-center justify-center">
                                             <div class="rounded-md shadow-md -space-y-px my-1 lg:text-2xl md:text-xl sm:text-xl">    
                                                 <label for="title" class=" font-bold lg:text-2xl md:text-xl sm:text-xl text-center  block placeholder-gray-600 text-gray-900"> Zmień notkę</label>
-                                                <input type="text" name="title" autocomplete="title" v-model="profile.note" class="appearance-none py-2 text-center rounded relative block w-full px-2  border border-purple-800 placeholder-gray-600 text-gray-900 focus:text-left focus:outline-none focus:ring-green-600 focus:border-green-600 focus:z-10 lg:text-2xl md:text-xl sm:text-xl" :placeholder="[[profile.note]]" /> 
+                                                <input type="text" name="title" autocomplete="title" v-model="profile.note" class="appearance-none py-2 text-center rounded relative block w-full  border border-purple-800 placeholder-gray-600 text-gray-900 focus:text-left focus:outline-none focus:ring-green-600 focus:border-green-600 focus:z-10 lg:text-2xl md:text-xl sm:text-xl" :placeholder="[[profile.note]]" /> 
                                             </div>
                                             </div>
                                         </div>
@@ -61,7 +62,7 @@
                             </div> 
                            
                            
-                            <div v-bind:class="{'hover:bg-purple-800 hover:text-gray-200': !dropPassword}"  class="font-bold text-2xl text-purple-900 my-4 py-3 rounded rounded-2xl border border-2 bg-gray-300 "> 
+                            <div v-bind:class="{'hover:bg-purple-800 hover:text-gray-200': !dropPassword}"  class="font-bold text-2xl text-purple-900 my-4 py-3 rounded rounded-2xl border border-2 border-purple-600 bg-white shadow-lg"> 
                                 <p v-on:click="this.dropPassword = !this.dropPassword"> Zmień hasło </p>
                                  <form @submit.prevent >
                 
@@ -106,7 +107,7 @@
                                 
                                 </form>
                             </div> 
-                            <div v-bind:class="{'hover:bg-purple-800 hover:text-gray-200': !dropUsername}" class="font-bold text-2xl text-purple-900 my-4 py-3 rounded rounded-2xl border border-2 bg-gray-300 "> 
+                            <div v-bind:class="{'hover:bg-purple-800 hover:text-gray-200': !dropUsername}" class="font-bold text-2xl text-purple-900 my-4 py-3 rounded rounded-2xl border border-2 border-purple-600 bg-white shadow-lg"> 
                                     <p v-on:click="this.dropUsername = !this.dropUsername"> Zmień nazwę użytkownika </p> 
                                         <form @submit.prevent >
                     
@@ -151,17 +152,32 @@
                                     
                                     </form>
                                 </div> 
-                             <div v-bind:class="{'hover:bg-purple-800 hover:text-gray-200': !dropAvatar}" class="font-bold text-2xl text-purple-900 my-4 py-3 rounded rounded-2xl border border-2 bg-gray-300 "> 
-                                    <p v-on:click="this.dropAvatar = !this.dropAvatar"> Avatar </p> 
+                             <div v-bind:class="{'hover:bg-purple-800 hover:text-gray-200': !dropAvatar}" class="fluid min-w-full font-bold text-2xl text-purple-900 my-1 py-2 rounded rounded-2xl border border-2 border-purple-600 bg-white objects-center justify-center shadow-lg"> 
+                                    <p v-on:click="this.dropAvatar = !this.dropAvatar"  > Avatar </p> <br>
                                         <form @submit.prevent >
                                             
-                                        <div v-bind:class="{'hidden': !dropAvatar, 'flex': dropAvatar}"  class="grid grid-cols-1   min-w-full " >
-                                            
-                                                <img v-if="profile.get_image" class="object-none object-center bg-yellow-300 max-w-full" :src="profile.get_image"/>
+                                        <div v-bind:class="{'hidden': !dropAvatar, 'flex': dropAvatar}"  class="grid grid-cols-1   min-w-full justify-items-center  " >
+                                                <div v-if="avatar_url==null" class="max-w-full max-h-100">
+                                                    <img v-if="profile.get_image" class="object-contain h-48 w-full bg-white"  :src="profile.get_image"/>
+                                                </div>
+                                                <div v-else class="max-w-full max-h-100">
+                                                    <img class="object-contain h-48 w-full bg-white " :src="avatar_url"/>
+                                                </div>
+                                                <label class="text-sm font-medium text-gray-900 block " for="user_avatar">Upload file</label>
                                                 
-                                                <label class="text-sm font-medium text-gray-900 block mb-2" for="user_avatar">Upload file</label>
-                                                <input @change="handleFileUpload( $event )" class="block w-full cursor-pointer bg-gray-50 border border-gray-300 text-gray-900 focus:outline-none focus:border-transparent text-sm rounded-lg"  aria-describedby="user_avatar_help" id="user_avatar" type="file">
-
+                                                    <div class="py-2  bg-white px-2">
+                                                        <div class="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
+                                                            <div class="md:flex">
+                                                                <div class="w-full p-3">
+                                                                    <div class="relative border-dotted h-48 rounded-lg border-dashed border-2 border-purple-700 bg-gray-100 flex justify-center items-center">
+                                                                        <div class="absolute">
+                                                                            <div class="flex flex-col items-center"> <i class="fa fa-folder-open fa-4x text-purple-700"></i> <span class="block text-gray-400 font-normal">Attach you files here</span> </div>
+                                                                        </div> <input @change="handleFileUpload( $event )" type="file" class="h-full w-full opacity-0" name="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                             
                                             <div v-if="!profile_exists" class="flex iems-center justify-center min-w-full lg:my-1 sm:my-8">
                                                 <p class="my-4 mx-4  sm:py-4  rounded-xl min-w-full bg-red-700 border border-red-900 boreder-1 items-center justify-center text-gray-200 hover:bg-red-500 lg:text-2xl sm:text-xl font-bold shadow-md">  
@@ -205,6 +221,7 @@
             
             </div>
         </div>
+    </main>
     </div>
 </template>
 <script>
@@ -229,6 +246,7 @@ export default{
            
             profile_error: {},
             avatar: null,
+            avatar_url: null,
             avatar_error: '',
             profile: {
                 description: '',
@@ -283,9 +301,10 @@ export default{
                     })
             },
          handleFileUpload(event){
-                    console.log(event)
+                    
                 this.avatar = event.target.files[0]
-                console.log(this.avatar)
+                
+                this.avatar_url = URL.createObjectURL(this.avatar);
             },
         updateProfile(){
                 this.profile_error = "";

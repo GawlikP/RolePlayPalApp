@@ -1,6 +1,15 @@
 <template>
 <div id="PostRecent" >
     <div  v-if="error.length < 1"  >
+         
+            <div class="grid grid-cols-5 gap-2 py-1 flex min-w-full my-1">
+                <div></div>
+                <div class="fluid min-w-full justify-center centered  my-1 col-span-5 xl:col-span-3 lg:col-span-3 md:col-span-5 sm:col-span-5"> 
+                    <PostFormComponent @updatePosts="addPost" />
+                </div>
+                <div> </div>
+            </div>
+       
         <div id="rows" v-for="(post, index) in fetched_data.posts" v-bind:key="index" class="grid grid-cols-5 gap-2 py-1 flex min-w-full my-1">
             <div div="my-1"></div> 
                 <div class="min-w-full col-span-5  my-1 xl:col-span-3 lg:col-span-3 md:col-span-5 sm:col-span-5">
@@ -24,6 +33,7 @@
 <script>
 import PostViewComponent from '@/components/Posts/PostViewComponent.vue'
 import PostPaginationComponent from '@/components/Posts/PostPaginationComponent.vue'
+import PostFormComponent from '@/components/Posts/PostFormComponent.vue'
 export default {
   name: 'PostRecentComponent',
    props: {
@@ -45,7 +55,10 @@ export default {
         
     },
     watch:{
-        '$route': 'getPosts'
+        '$route': 'getPosts',
+        fetched_data: {
+
+        },
     },
     methods :{
             getPosts: function(){
@@ -79,11 +92,15 @@ export default {
                     this.error = err;
                 }
             })
+            },
+            addPost: function(post){
+                this.fetched_data.posts.push(post);
             }
     },
   components: {
     PostViewComponent, 
-    PostPaginationComponent
+    PostPaginationComponent,
+    PostFormComponent
   }
 }
 </script>

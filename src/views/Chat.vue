@@ -1,19 +1,20 @@
 <template>
 	<div id="Chat">
 		<NavigationBar />
+	<main>
 	<div class="container mx-4 py-3">
 		<p class="text-bold font-2xl text-red-800 mx-2"> Chat </p>
 		<p class="font-xl text-blue-700 mx-4"> Name: {{name}} </p>
 		<textarea class=" form-textarea mt-1 block w-full rounded rounded-xl border border-red-700"
 		row="10"
-		>
-			{{chat_text}}
+		>{{chat_text}}
 		</textarea>
 			
 		<input v-model="input_text" type="text" class="w-full mt-2 mb-6 py-3 border rounded-lg text-lg" id="inputs_area" />
 		<button v-on:click="sendMessage()" value="Submit" class="mb-1 mx-2 w-full bg-purple-600 hover:bg-purple-800 text-gray-100 rounded">SEND</button>
 		 
 	</div>
+	</main>
 	</div>
 </template>
 <script>
@@ -53,10 +54,11 @@ export default {
 		}
 		this.chatSocket.onclose = function(e){
 			console.error('Chat socket closed!');
+			this.chat_text += "CONNECTION FAILED";
 			console.log(this.chatScoket)
 		}
 		this.chatSocket.onopen = function(e){
-			console.log(event)
+			//console.log(event)
 			this.chat_text += "Connnected! \n"
 		}
 	},

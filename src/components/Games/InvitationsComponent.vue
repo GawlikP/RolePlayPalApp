@@ -1,15 +1,13 @@
 <template>
     <div id="InvitationsComponent">
         <div class="flex items-center justify-center min-w-full grid grid-cols-3 lg:my-4 sm:my-4">
-            <button v-bind:class="{'text-white bg-purple-700  border border-purple-800 hover:bg-white hover:text-gray-900': filter=='canceled',  'hover:text-white hover:bg-purple-700  border border-purple-800 bg-white text-gray-900': filter!=='canceled'}"  type="submit" v-on:click="GetCanceled()" class=" mx-4 rounded-xl min-w-full  items-center justify-center  lg:text-2xl sm:text-xl font-bold shadow-md">  
-                <span type="text" name="email" class="" placeholder="Email" > Odrzucone </span> 
-            </button>
-             <button v-bind:class="{'text-white bg-purple-700  border border-purple-800 hover:bg-white hover:text-gray-900': filter=='accepted',  'hover:text-white hover:bg-purple-700  border border-purple-800 bg-white text-gray-900': filter!=='accepted'}" type="submit" v-on:click="GetAccepted()" class=" mx-4 rounded-xl min-w-full  items-center justify-center  lg:text-2xl sm:text-xl font-bold shadow-md">  
-                <span type="text" name="email" class="" placeholder="Email" > Zaakceptowane </span> 
-            </button>
-             <button v-bind:class="{'text-white bg-purple-700  border border-purple-800 hover:bg-white hover:text-gray-900': filter=='pending',  'hover:text-white hover:bg-purple-700  border border-purple-800 bg-white text-gray-900': filter!=='pending'}" type="submit" v-on:click="GetPending()"  class=" mx-4 rounded-xl min-w-full  items-center justify-center  lg:text-2xl sm:text-xl font-bold shadow-md">  
-                <span type="text" name="email" class="" placeholder="Email" > Oczekujące </span> 
-            </button>
+            <ul id="tabs" class="inline-flex w-full px-1 pt-2 ">
+                <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': filter=='canceled',  'text-gray-800': filter!=='canceled'}" class="px-4 py-2 -mb-px font-semibold  rounded-t " v-on:click="filter='canceled'">Odrzucone</li>
+                <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': filter=='accepted',  'text-gray-800': filter!=='accepted'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="filter='accepted'" >Akceptowane</li>
+                <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': filter=='pending',  'text-gray-800': filter!=='pending'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="filter='pending'" >Oczekujące</li>
+            </ul>
+           
+           
         </div>
         <div v-if="loading">
             <p class="text-2xl"> Loading... </p>
@@ -65,7 +63,9 @@ export default ({
         '$route': 'GetPending',
         '$route': 'GetAccepted',
         '$route': 'GetCanceled',
-        profile_name: function (val) {
+        '$route': 'Cancel',
+        '$route': 'Accept',
+        filter: function (val) {
             if(val == 'accepted') this.GetAccepted();
             if(val == 'canceled') this.GetCanceled();
             if(val == 'pending') this.GetPending();
@@ -207,7 +207,7 @@ export default ({
                 }
             fetch(`http://localhost:8000/api/games/invitations/${id}/cancel/`, requestOptions)
             .then((res => {
-                if(res.status == 200){
+                if(res.status == 201){
                     return res.json();
                     
                 }else{
@@ -221,6 +221,7 @@ export default ({
                 });
                 this.response = res;
                 this.filter='canceled'
+                this.GetCanceled();
             }))
             .catch((err=>{
                  try{
@@ -241,7 +242,7 @@ export default ({
                 }
             fetch(`http://localhost:8000/api/games/invitations/${id}/accept/`, requestOptions)
             .then((res => {
-                if(res.status == 200){
+                if(res.status == 201){
                     return res.json();
                 }else{
                     throw res;
@@ -254,6 +255,8 @@ export default ({
                     return obj.id !== id;
                 });
                 this.filter='accepted'
+                this.response = res;
+                this.GetAccepted();
             }))
             .catch((err=>{
                  try{

@@ -65,6 +65,7 @@
 <script>
 export default {
   name: 'PostFormComponent',
+  emits: ["updatePosts"],
   data ()  {
       return {
         isFormDown: false,
@@ -135,6 +136,8 @@ export default {
             .then((response => {
                     console.log(response);
                     this.ok = true;
+                    this.post = res;
+                    this.$emit("updatePosts", post);
             }))
             .catch(err => {
                 
