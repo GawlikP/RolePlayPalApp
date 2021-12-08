@@ -216,6 +216,7 @@ export default ({
             }))
             .then((res=> {
                 this.ok = true;
+                this.response = res;
                 this.invitations = this.invitations.filter(function( obj ) {
                     return obj.id !== id;
                 });

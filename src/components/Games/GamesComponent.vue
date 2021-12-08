@@ -27,7 +27,7 @@
                                 <div class="my-4 mx-2  rounded-xl items-center justify-center">
                                     <div class="rounded-md shadow-md -space-y-px">    
                                             <div v-if="player[game.id] ===''">
-                                            <input @focus="show_profile_list[game.id] = true"  id="username" type="text" name="username" autocomplete="username" v-model="profiles_search[game.id]" class="appearance-none text-center rounded relative block w-full px-2 py-2 border border-purple-800 placeholder-gray-600 text-gray-900 focus:text-left focus:outline-none focus:ring-green-600 focus:border-green-600 focus:z-10 lg:text-3xl md:text-2xl sm:text-xl" placeholder="Wyszukaj Profilu" /> 
+                                            <input @focus="show_profile_list[game.id] = true"  id="username" type="text" name="username" autocomplete="off"  v-model="profiles_search[game.id]" class="appearance-none text-center rounded relative block w-full px-2 py-2 border border-purple-800 placeholder-gray-600 text-gray-900 focus:text-left focus:outline-none focus:ring-green-600 focus:border-green-600 focus:z-10 lg:text-3xl md:text-2xl sm:text-xl" placeholder="Wyszukaj Profilu" /> 
                                                 <div v-if="computing[game.id] && show_profile_list[game.id]"><p class="text-2xl fond-bold"> Searching... </p> </div>
                                                 <div v-if="!computing[game.id] && show_profile_list[game.id]">
                                                     <div id="dropdown" class="bg-white min-w-full text-base z-10 list-none divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700">
@@ -138,7 +138,7 @@ export default {
                 "Content-Type": "application/json",
                 Authorization: `Token ${this.$store.state.user.token}`,}
             };
-        fetch(`http://localhost:8000/api/profiles/?username=${val[`${game_id}`]}&slug=${val[`${game_id}`]}`,requestOptions)
+        fetch(`http://localhost:8000/api/games/${game_id}/invitations/new/?username=${val[`${game_id}`]}&slug=${val[`${game_id}`]}`,requestOptions)
             .then((res) => {
                 if (res.status == 200) {
                     return res.json();
