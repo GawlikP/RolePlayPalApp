@@ -6,9 +6,9 @@
             </div> 
                     <div v-bind:class="{'hidden': !isFormDown, 'flex': isFormDown}"  class="grid grid-cols-1   min-w-full " > 
                         <CommentFormComponent  v-bind:post_absolute_url="post_absolute_url" @updateComments="getComments" />
-                        <div class="my-3 ">
+                        <div v-if="!update" class="my-3 ">
                             <div v-for="comment in comments" v-bind:key="comment.id" >
-                                <CommentViewComponent v-bind:post_absolute_url="post_absolute_url" v-bind:user="comment.user" v-bind:user_username="comment.user_username" v-bind:content="comment.content" v-bind:created="comment.created" />
+                                <CommentViewComponent @deleted="deleteComment" @edited="editComment" v-bind:post_absolute_url="post_absolute_url" v-bind:id="comment.id" v-bind:user="comment.user" v-bind:user_username="comment.user_username" v-bind:content="comment.content" v-bind:created="comment.created" />
                             </div>
                         </div>
                     </div>
@@ -29,7 +29,11 @@ export default{
     },
     data(){
         return {
-             isFormDown: false,
+            isFormDown: false,
+            update:false,
+            id_to_pop: 0,
+            content: "",
+            id_to_update: 0,
             comments: []
         }
     },
@@ -37,7 +41,30 @@ export default{
         
     },
     watch:{
-        '$route':'getComments' 
+        '$route':'getComments',
+        update(newval,oldval){
+            if(newval == true)
+            {
+                let id = this.id_to_pop;
+                if(id != 0){
+                    this.comments = this.comments.filter(function( obj ){
+                        return obj.id !== id
+                    })
+                    this.id_to_pop = 0;
+                    this.update = false;
+                }
+                id = this.id_to_update;
+                let content = this.content;
+                if(id !=0){
+                    this.comments = this.comments.filter(function (obj){
+                        if (obj.id == id) obj.content = content;
+                        return obj;
+                    })
+                    this.id_to_update = 0;
+                    this.update = false;
+                }
+            }
+        }
     },
     methods: {
          changeFormDown(){
@@ -58,13 +85,72 @@ export default{
           .then((response =>{
      
               this.comments = response;
-              console.log(this.comments);
+              
               
           }))
           .catch(err=> {
               console.log(err)
           })
+        },
+        deleteComment(comment_id){
+            
+            const requestOptions = {
+                method:"PUT",
+                headers: {
+                    "Content-Type":"application/json",
+                    "Authorization": `Token ${this.$store.state.user.token}`
+                },
+                body: JSON.stringify({deleted: true})
+            }
+            fetch(`http://localhost:8000/api/posts/comments/${comment_id}/`, requestOptions)
+            .then((res=>{
+                if(res.status == 201) return res.json()
+                else throw res
+            }))
+            .then((response =>{
+        
+                //this.comments = response;
+                this.response = response;
+                
+                console.log(response)
+                this.id_to_pop = comment_id;
+                this.update = true;
+                
+            }))
+            .catch(err=> {
+                console.log(err)
+            })
+        },
+        editComment(comment_id,content){
+            const requestOptions = {
+                method:"PUT",
+                headers: {
+                    "Content-Type":"application/json",
+                    "Authorization": `Token ${this.$store.state.user.token}`
+                },
+                body: JSON.stringify({content: content})
+            }
+            fetch(`http://localhost:8000/api/posts/comments/${comment_id}/`, requestOptions)
+            .then((res=>{
+                if(res.status == 201) return res.json()
+                else throw res
+            }))
+            .then((response =>{
+        
+                //this.comments = response;
+                this.response = response;
+                
+                console.log(response)
+                this.id_to_update = comment_id;
+                this.content = content;
+                this.update = true;
+                
+            }))
+            .catch(err=> {
+                console.log(err)
+            })
         }
+
     }
 }
 </script>

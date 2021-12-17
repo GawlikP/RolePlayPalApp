@@ -79,7 +79,7 @@ export default {
                     method: "GET",
                     headers: {"Content-Type": "application/json", "Authorization": `Token ${this.$store.state.user.token}`},
                 }
-                console.log(requestOptions)
+        
             fetch(`http://localhost:8000/api/posts/?page_number=${this.page_number}&page_size=${this.page_size}`,requestOptions)
             .then((res => {
                 if(res.status == 200){
@@ -94,7 +94,7 @@ export default {
                     this.ok = true;
                     this.fetched_data = response;
                     this.loading = false;
-                    console.log(this.fetched_data);
+             
             }))
             .catch(err => {
                  try{
