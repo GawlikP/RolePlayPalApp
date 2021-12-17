@@ -63,8 +63,6 @@ export default ({
         '$route': 'GetPending',
         '$route': 'GetAccepted',
         '$route': 'GetCanceled',
-        '$route': 'Cancel',
-        '$route': 'Accept',
         filter: function (val) {
             if(val == 'accepted') this.GetAccepted();
             if(val == 'canceled') this.GetCanceled();

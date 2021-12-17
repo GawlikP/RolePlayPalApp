@@ -1,6 +1,6 @@
 <template>
 
-<nav class="sticky mt-0  w-full z-10 top-0 items-center justify-between  py-4 bg-black ">
+<nav class="sticky mt-0  w-full z-20 top-0 items-center justify-between  py-4 bg-black ">
     <div class="container mx-2 flex flex-wrap items-center justify-between">
       <div class="w-full relative flex justify-between lg:w-auto px-4  lg:static lg:block lg:justify-start">
         <a class="lg:text-2xl sm:text-xl font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white" >

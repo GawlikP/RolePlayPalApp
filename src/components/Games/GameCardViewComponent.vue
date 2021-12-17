@@ -11,13 +11,14 @@
         <p class="text-gray-900 text-xl py-1">
          Gracze: 
         </p>
-        <button type="submit" v-on:click="$router.push(`/chat/${this.room_key}`)" class=" rounded-xl min-w-full bg-white border border-purple-800 boreder-1 items-center justify-center hover:bg-purple-900 hover:text-white lg:text-3xl sm:text-2xl font-bold shadow-md">  
+        <button type="submit" v-on:click="$router.push(`/chat/${this.room_key}`)" class=" rounded-xl min-w-full bg-white border border-purple-800 border-1 items-center justify-center hover:bg-purple-900 hover:text-white lg:text-3xl sm:text-2xl font-bold shadow-md">  
           <span type="text" name="email" class="" placeholder="Email" > Graj </span> 
         </button>
       </div>
-      <div class="flex px-6 pt-4 pb-2">
-        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-gray-700 mr-2 mb-2" id="players" v-for="(player, index) in players" v-bind:key="index" >
-         <ProfileIcon v-bind:user_id="player.id" />   
+      <div  v-if="!loading_players" class="flex px-6 pt-4 pb-2">
+        <span class="relative inline-block bg-white rounded-full px-3 py-1 text-gray-700 mr-2 mb-2" id="players" v-for="(player, index) in game_players" v-bind:key="index" >
+          <i v-if="$store.state.user.id == this.game_master.id" class="absolute text-red-700 fas fa-times-circle z-10" v-on:click="removePlayer(player.id)"></i>
+          <ProfileIcon v-bind:user_id="player.id" />
         </span>
       </div>
     </div>
@@ -43,6 +44,55 @@ export default ({
   },
   components:{
       ProfileIcon
-  }
+  },
+   data(){
+        return {
+          error: {},
+          ok: false,
+          loading_players: false,
+          response: {},
+          game_players: this.players,
+        }
+   },
+  methods:{
+    removePlayer(id){
+       
+            this.error = "";
+            this.ok = false;
+            this.loading_players = true;
+            const requestOptions = {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json", 
+                    Authorization: `Token ${this.$store.state.user.token}`,
+                },
+            }
+            fetch(`http://localhost:8000/api/games/${this.slug}/players/${id}/remove/`,requestOptions)
+            .then((res => {
+                if(res.status == 200){
+                    return res.json()
+                }else {
+                   throw res
+                }
+            }
+            ))
+            .then((response => {
+                    
+                    this.ok = true;
+                    this.response = response;
+                    this.game_players = this.game_players.filter(function( obj ) {
+                      return obj.id !== id;
+                    });
+                    console.log(this.game_players)
+                    this.loading_players = false;
+            }))
+            .catch(err => {
+                
+                err.json().then(json => {
+                    this.error = json
+                });
+            })
+    }
+  },
 })
 </script>
