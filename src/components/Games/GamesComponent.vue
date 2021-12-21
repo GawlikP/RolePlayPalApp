@@ -21,6 +21,15 @@
                                
                 
                     <div v-if="game.game_master.profile_slug == profile.slug" id="Nothing_to_show" class="container fluid px-3 min-w-full min-h-10 px-2 py-2 shadow-2xl bg-white text-gray-900 rounded-xl ">
+                       <div class="w-full ">
+                       <p v-on:click="delete_game_dropdown[game.id]= !delete_game_dropdown[game.id]" class="w-full py-4 mx-2 text-xl sm:text-md font-bold text-red-700 text-center "> Usuń rozgrywkę </p>
+                          <div v-if="delete_game_dropdown[game.id]" class="flex flex-col w-full py-2 text-xl sm:text-md font bold text-gray-600 shadow-xl rounded"> 
+                              <p class="w-full text-center"> Czy jesteś pewien, że chcesz usunąć tą rozgrywkę? </p>
+                               <button type="submit" v-on:click="deleteGame(game.slug)" class="my-4   sm:py-4  rounded-xl min-w-full bg-white border border-red-800 border-1 items-center justify-center text-black  hover:text-gray-200 hover:bg-red-600 lg:text-2xl sm:text-xl font-bold shadow-md">  
+                                    <span type="text"  > Usuń </span> 
+                                </button>
+                          </div>
+                       </div>
                         <p class="break-all text-center font-bold text-2xl  min-w-full bg-white rounded-xl "> Zaproś nowych graczy </p>
                         <p class="text-center font-bold text-2xl min-w-full bg-white rounded-xl">
                             <div>
@@ -74,7 +83,7 @@
             </div>
         </div>
         <div v-if="profile_fetched && games_ok && page > 0">
-            <GamesPaginationComponent v-bind:page_numbers="page_numbers" v-bind:act_page="page"/>
+            <GamesPaginationComponent :key="page" @updatePage="changePage" v-bind:page_numbers="page_numbers" v-bind:act_page="page"  />
           </div>
     </div>
 </template>
@@ -85,8 +94,8 @@ import GamesPaginationComponent from '@/components/Games/GamesPaginationComponen
 export default {
   data() {
     return {
-     // games: [],
-     // page: this.$route.params.page,
+
+      page: 1,
       games: [],
       fetched_data: [],
       profiles_search: [],
@@ -109,12 +118,17 @@ export default {
       sending_errors: "",
       send_response: "",
       send_status: 0,
+      paginationComponentKey: 0,
+
+      deleting: false,
+      deleting_ok: false,
+      deleting_response: {},
+      deleting_errors: {},
+      delete_game_dropdown: {},
+
     };
   },
   
-  props: {
-    page: Number,
-  },
   created() {
     // fetching method here
     this.fetchGames();
@@ -125,11 +139,11 @@ export default {
     $route: "fetchProfile",
     profiles_search: {
       handler(val,old_val){
-          console.log(old_val['8'])
+
           
         let game_id = Object.keys(this.show_profile_list).find(key => this.show_profile_list[key] === true);
         if(typeof game_id !== "undefined"){
-        console.log(old_val[`${game_id}`])
+     
         this.computing[`${game_id}`] = true 
         this.player[game_id] = ""
         const requestOptions = {
@@ -158,7 +172,8 @@ export default {
                 } catch (e) {
                     this.error = err;
                 }
-                });}
+                });
+            }
          
       },
       deep: true,
@@ -183,7 +198,7 @@ export default {
       fetch(`http://localhost:8000/api/games/me/?page_number=${this.page}&page_size=${this.page_size}`, requestOptions)
         .then((res) => {
           if (res.status == 200) {
-              this.games_ok = true;
+             
             return res.json();
           } 
           else if (res.status == 406){
@@ -200,11 +215,14 @@ export default {
           this.profiles_search = Array.from(this.games, (x, index) => x.id).reduce((map,obj) => { map[obj] = ""; return map;}, {})
           this.show_profile_list = Array.from(this.games, (x, index) => x.id).reduce((map,obj) => { map[obj] = false; return map;}, {})
           this.computing = Array.from(this.games, (x, index) => x.id).reduce((map,obj) => { map[obj] = false; return map;}, {})
+          this.delete_game_dropdown = Array.from(this.games, (x, index) => x.id).reduce((map,obj) => { map[obj] = false; return map;}, {})
           console.log(this.computing)
           this.player = Array.from(this.games, (x, index) => x.id).reduce((map,obj) => { map[obj] = ""; return map;}, {})
    
           this.page_numbers = this.fetched_data.page_numbers;
           this.loading = false;
+          this.games_ok = true;
+        
           
         })
         .catch((err) => {
@@ -217,7 +235,6 @@ export default {
     },
     fetchProfile() {
       this.profile_fetched = false;
-      const user = this.$store.state.user.username;
       const requestOptions = {
         method: "GET",
         headers: { Authorization: `Token ${this.$store.state.user.token}` },
@@ -278,9 +295,46 @@ export default {
                
             });
 
+      },
+      changePage(act_page){
+         
+            this.page = act_page;
+            //this.paginationComponentKey += 1;
+            this.fetchGames();
+            
+      },
+      deleteGame(game_slug){
+        this.deleting = true;
+        this.deleting_ok = false;
+        const requestOptions = {
+          method: "PUT",
+          headers: {"Content-Type": "application/json", Authorization: `Token ${this.$store.state.user.token}`},
+          body: JSON.stringify({deleted: true})
+        }
+        fetch(`http://localhost:8000/api/games/${game_slug}/`, requestOptions)
+        .then((res) =>{
+          if(res.status == 201){
+            return res.json()
+          }
+          else{
+            throw res;
+          }
+        })
+        .then((res) =>{
+          this.deleting = false;
+          this.deleting_ok = true;
+          this.deleting_response = res;
+        }).then(()=>{
+          this.fetchGames();
+        })
+        .catch((err) =>{
+          this.deleting_erros = err;
+          console.log(err);
+        })
     }
-    
   },
+  
+
   components: {
     GameCardViewComponent,
     ProfileIcon,

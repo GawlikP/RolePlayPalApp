@@ -1,40 +1,42 @@
 <template>
     <div id="Games">
         <NavigationBar />
-        <div class="container  min-h-screen min-w-full items-center justify-center" >
-            <div class="grid grid-cols-5 gap-4 flex min-w-full my-1">
-                <div></div>
-                <div class="grid grid-cols-1 gap-2flex min-w-full my-1 px-1 md:col-span-5 lg:col-span-3 col-span-5">
-                    <ul id="tabs" class="inline-flex w-full px-1 pt-2 ">
-                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='games',  'text-gray-800': state!=='games'}" class="px-4 py-2 -mb-px font-semibold  rounded-t " v-on:click="state='games'">Gry</li>
-                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='invitations',  'text-gray-800': state!=='invitations'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="state='invitations'" >Zaproszenia</li>
-                          <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='create_game',  'text-gray-800': state!=='create_game'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="state='create_game'" >Stwórz rozgrywkę</li>
-                        </ul>
-                    <div v-if="loading">
-                        <p class="text-3xl text-left font-bold "> Please Wait... </p>
-                    </div>
-                     <div v-if="!loading && state=='games'">
+        <main >
+            <div class="container  min-h-screen min-w-full items-center justify-center" >
+                <div class="grid grid-cols-5 gap-4 flex min-w-full my-1">
+                    <div></div>
+                    <div class="grid grid-cols-1 gap-2flex min-w-full my-1 px-1 md:col-span-5 lg:col-span-3 col-span-5">
+                        <ul id="tabs" class="inline-flex w-full px-1 pt-2 ">
+                            <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='games',  'text-gray-800': state!=='games'}" class="px-4 py-2 -mb-px font-semibold  rounded-t " v-on:click="state='games'">Gry</li>
+                            <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='invitations',  'text-gray-800': state!=='invitations'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="state='invitations'" >Zaproszenia</li>
+                            <li v-bind:class="{'text-purple-900 border-b-2 border-purple-400': state=='create_game',  'text-gray-800': state!=='create_game'}" class="px-4 py-2 font-semibold  rounded-t " v-on:click="state='create_game'" >Stwórz rozgrywkę</li>
+                            </ul>
+                        <div v-if="loading">
+                            <p class="text-3xl text-left font-bold "> Please Wait... </p>
+                        </div>
+                        <div v-if="!loading && state=='games'">
+                            
+                            
+                            <GamesComponent />
+                            
+                        </div>
+                        <div v-if="!loading && state=='invitations'">
+                                <div class="text-xl text-left font-bold min-w-full grid grid-cols-1">
+                                        <InvitationsComponent  />
+                                </div>
+                        </div>
+                        <div v-if="!loading && state=='create_game'">
+                                <div class="text-xl text-left font-bold min-w-full grid grid-cols-1">
+                                        <GameCreationComponent  />
+                                </div>
+                        </div>
                         
-                           
-                           <GamesComponent v-bind:page="page"/>
-                        
                     </div>
-                    <div v-if="!loading && state=='invitations'">
-                            <div class="text-xl text-left font-bold min-w-full grid grid-cols-1">
-                                    <InvitationsComponent  />
-                            </div>
-                    </div>
-                    <div v-if="!loading && state=='create_game'">
-                            <div class="text-xl text-left font-bold min-w-full grid grid-cols-1">
-                                    <GameCreationComponent  />
-                            </div>
-                    </div>
-                    
+                    <div></div>
                 </div>
-                <div></div>
+        
             </div>
-            <GamesPaginationComponent />
-        </div>
+        </main>
     </div>
 </template>
 <script>
@@ -48,7 +50,7 @@ export default ({
     name: 'Games',
     data(){
         return {
-            page: this.$route.params.page,
+            page: 1,
             games: [],
             fetched_data: [],
             page_numbers: 0,

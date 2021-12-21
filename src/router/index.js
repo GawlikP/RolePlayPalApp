@@ -50,16 +50,21 @@ const routes = [
     component: () => import('@/views/Account')
   },
   {
-    path: '/games/:page',
+    path: '/games',
     name: 'Games',
     component: () => import('@/views/Games'),
-    props:true,
   },
   {
     path: '/logout',
     name: 'Logout',
     component: () => import('@/views/Logout')
   },
+  {
+    path: '/gamepanel/:slug',
+    name: 'GamePanel',
+    component: () => import('@/views/GamePanel'),
+    props: true,
+  }
 
 ]
 

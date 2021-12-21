@@ -116,7 +116,7 @@ export default({
                     this.$store.commit({type:'logUser', token:response['auth_token'], username:this.username})
                     this.error = "";
                     this.ok = false;
-                    console.log("złapałem")
+
                     const requestOptions = {
                         method: "GET",
                          headers: {"Content-Type": "application/json", "Authorization": `Token ${this.$store.state.user.token}`},
@@ -130,18 +130,17 @@ export default({
                         this.ok = true;
                         this.componentKey += 1; 
                         this.$store.commit({type:'logUser', token:this.$store.state.user.token, username:response['username'], id:response['id']})
-                        console.log(this.$store.state.user)
+           
             }))
             .catch(err => {
-                console.log("zjebałem");
-               try{
-                            this.error = err.json().toString()
+                        try{
+                            this.error = err.json()
                         }
                         catch(e)
                         {
-                            this.error = err;
+                            this.error['other'] = err;
                         }
-            
+                console.log(this.error)
             })
             //this.$store.commit({type: 'logUser', token: this.token, username: this.username})
         }

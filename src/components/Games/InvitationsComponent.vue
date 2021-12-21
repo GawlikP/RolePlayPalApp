@@ -32,6 +32,7 @@
                 </div>
                 
             </div>
+            <GamesPaginationComponent :key="page" @updatePage="changePage" v-bind:page_numbers="page_numbers" v-bind:act_page="page"  />
         </div>
         <div v-if="!loading && not_found" >
             <div id="Nothing_to_show" class="container fluid px-3 min-w-full min-h-10 px-2 py-2 shadow-2xl   rounded-xl ">
@@ -42,6 +43,7 @@
 </template>
 <script>
 import ProfileIcon from '@/components/Profiles/ProfileIconComponent.vue'
+import GamesPaginationComponent from '@/components/Games/GamesPaginationComponent';
 export default ({
     name: 'InvitationsComponent',
     data(){
@@ -54,6 +56,9 @@ export default ({
             not_found: false,
             not_found_response: {},
             response: {},
+            page: 1,
+            page_size: 5, 
+            page_numbers: 5,
         }
     },
     created(){
@@ -70,6 +75,14 @@ export default ({
         }
     },
     methods: {
+         changePage(act_page){
+            this.page = act_page;
+            //this.paginationComponentKey += 1;
+            if(this.filter == 'accepted') this.GetAccepted();
+            if(this.filter == 'canceled') this.GetCanceled();
+            if(this.filter == 'pending') this.GetPending();
+            
+        },
         GetPending(){
             this.error = "";
             this.loading = true;
@@ -79,7 +92,7 @@ export default ({
                     method: "GET",
                     headers: {"Content-Type": "application/json", "Authorization": `Token ${this.$store.state.user.token}`},
                 }
-            fetch('http://localhost:8000/api/games/invitations/me/?accepted=False&canceled=False', requestOptions)
+            fetch(`http://localhost:8000/api/games/invitations/me/?accepted=False&canceled=False&page_number=${this.page}&page_size=${this.page_size}`, requestOptions)
             .then((res => {
                 if(res.status == 200){
                     return res.json();
@@ -95,8 +108,12 @@ export default ({
             }))
             .then((res=> {
                 this.ok = true;
-                 if(!this.not_found)
-                    this.invitations = res;
+                if(!this.not_found){
+                    let resp = res;
+
+                    this.invitations = resp.invitations;
+                    this.page_numbers = resp.page_numbers;
+                }
                 else 
                     this.not_found_response = res;
                 this.loading = false;
@@ -121,11 +138,11 @@ export default ({
                     method: "GET",
                     headers: {"Content-Type": "application/json", "Authorization": `Token ${this.$store.state.user.token}`},
                 }
-            fetch('http://localhost:8000/api/games/invitations/me/?accepted=True', requestOptions)
-            .then((res => {
+            fetch(`http://localhost:8000/api/games/invitations/me/?accepted=True&page_number=${this.page}&page_size=${this.page_size}`, requestOptions)
+             .then((res => {
                 if(res.status == 200){
                     return res.json();
-                }
+                } 
                 if(res.status == 404)
                 {
                     this.not_found = true;
@@ -137,8 +154,12 @@ export default ({
             }))
             .then((res=> {
                 this.ok = true;
-                 if(!this.not_found)
-                    this.invitations = res;
+                if(!this.not_found){
+                    let resp = res;
+              
+                    this.invitations = resp.invitations;
+                    this.page_numbers = resp.page_numbers;
+                }
                 else 
                     this.not_found_response = res;
                 this.loading = false;
@@ -163,7 +184,7 @@ export default ({
                     method: "GET",
                     headers: {"Content-Type": "application/json", "Authorization": `Token ${this.$store.state.user.token}`},
                 }
-            fetch('http://localhost:8000/api/games/invitations/me/?canceled=True', requestOptions)
+            fetch(`http://localhost:8000/api/games/invitations/me/?canceled=True&page_number=${this.page}&page_size=${this.page_size}`, requestOptions)
             .then((res => {
                 if(res.status == 200){
                     return res.json();
@@ -179,8 +200,11 @@ export default ({
             }))
             .then((res=> {
                 this.ok = true;
-                if(!this.not_found)
-                    this.invitations = res;
+                if(!this.not_found){
+                    let resp = res;
+                    this.invitations = resp.invitations;
+                    this.page_numbers = resp.page_numbers;
+                }
                 else 
                     this.not_found_response = res;
                 this.loading = false;
@@ -269,7 +293,8 @@ export default ({
         }
     },
     components:{
-          ProfileIcon 
+          ProfileIcon,
+          GamesPaginationComponent
       }
 })
 </script>
