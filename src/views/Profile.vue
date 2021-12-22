@@ -7,7 +7,7 @@
                     <div v-if="loading" class="font-bold text-xl my-1">
                         Loading...
                     </div>
-                    <div v-else class="mx-2">
+                    <div v-else class="mx-2 w-full h-full">
 
                         <div v-if="error" class="error my-1 ">
                             {{ error }}
@@ -15,11 +15,11 @@
 
                         <div v-if="profile" class="">
                             <div class="container mx-auto my-5 p-5">
-                                    <div class="md:flex no-wrap md:-mx-2 ">
+                                    <div class="md:flex no-wrap md:-mx-2 w-full h-full">
                                         <!-- Left Side -->
                                         <div class="w-full md:w-3/12 md:mx-2">
                                             <!-- Profile Card -->
-                                            <div class="bg-white p-3 border-t-4 border-purple-600">
+                                            <div class="bg-white p-3 min-w-full border-t-4 border-purple-600">
                                                 <div class="image overflow-hidden">
                                                     <img class="h-auto w-full mx-auto"
                                                         :src="profile.get_image"
@@ -146,7 +146,7 @@ import moment from 'moment'
                 players_errors: null,
                 ok_masters: false,
                 masters_errors: null,
-                loading: false,
+                loading: true,
                 error: null,
                 profile: null,
                 players: {},
@@ -156,7 +156,7 @@ import moment from 'moment'
             }
         },
         created(){
-            // fetching method here
+            this.$router.push({ name: "Profile"})
             this.fetchData()
         },
          computed:{
@@ -165,20 +165,35 @@ import moment from 'moment'
                 }
         },
         watch: {
-            '$route': 'fetchData'
+            '$route': 'fetchData',
+            '$route.params.slug': function (slug) {
+                this.profile = null
+                this.players = {} 
+                this.masters = {}
+                this.masters_errors = null
+                this.players_errors = null
+                this.loading = true
+                this.fetchData()
+            },
+           
         },
         methods: {
             fetchData(){
                 this.error = this.post = null 
                 this.loading = true 
-                const fetch_slug = this.profile_name
-
+                let fetch_slug = this.profile_name
+                console.log("loading")
+                this.profile = null
+                this.players = {} 
+                this.masters = {}
+                this.masters_errors = null
+                this.players_errors = null
                 const requestOptions = {
                     method: "GET",
                     headers: {"Content-Type": "application/json", "Authorization": `Token ${this.$store.state.user.token}`},
                 }
             
-                    fetch(`http://localhost:8000/api/profiles/${fetch_slug}/?limit=${this.limit}`,requestOptions)
+                    fetch(`http://localhost:8000/api/profiles/${this.$route.params.slug}/?limit=${this.limit}`,requestOptions)
                     .then((res => {
                         if(res.status == 200){
                             return res.json()
@@ -194,7 +209,7 @@ import moment from 'moment'
                             
                     }))
                     .then(() =>{
-                        fetch(`http://localhost:8000/api/profiles/${fetch_slug}/players/?limit=${this.limit}`, requestOptions)
+                        fetch(`http://localhost:8000/api/profiles/${this.$route.params.slug}/players/?limit=${this.limit}`, requestOptions)
                         .then((res=> {
                             if(res.status == 200)
                             {
@@ -219,7 +234,7 @@ import moment from 'moment'
 
                     })
                     .then(() =>{
-                            fetch(`http://localhost:8000/api/profiles/${fetch_slug}/masters/`, requestOptions)
+                            fetch(`http://localhost:8000/api/profiles/${this.$route.params.slug}/masters/`, requestOptions)
                             .then((res=> {
                             if(res.status == 200)
                             {
