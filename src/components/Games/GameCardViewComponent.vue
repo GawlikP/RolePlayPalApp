@@ -8,6 +8,8 @@
         <p class="text-gray-700 text-base">
         Opis:  {{this.description}}
         </p>
+        <p v-if="$store.state.user.id == this.game_master.id" v-on:click="$router.push(`/gamepanel/${this.slug}`)" 
+        class="text-purple-700 text-base"> Przejdz do panelu rozgrywki </p>
         <p class="text-gray-900 text-xl py-1">
          Gracze: 
         </p>
