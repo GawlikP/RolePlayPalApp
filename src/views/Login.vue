@@ -30,10 +30,11 @@
                         <div class="my-4 mx-2 bg-red-200 rounded-xl lg:my-4  sm:my-6">
                             <div class="rounded-md bg-red-200 shadow-md  -space-y-px ">
                                
-                                <span class="text-bold text-3xl text-left font-bold text-red-600 "><div v-for="(value, name) in error" :key="name">
-                                    <i class="fas fa-exclamation-circle"></i> {{name}} : {{value}}<br> 
+                                <span class="text-bold text-3xl text-left font-bold text-red-600 "><div v-for="(value,name ) in error" :key="name">
+                                    <i class="fas fa-exclamation-circle"></i>  {{value[0]}} <br> 
                                     </div>
-                                 
+                                   
+                        
                                  </span>
                             </div>
                         </div>
@@ -132,15 +133,11 @@ export default({
                         this.$store.commit({type:'logUser', token:this.$store.state.user.token, username:response['username'], id:response['id']})
            
             }))
-            .catch(err => {
-                        try{
-                            this.error = err.json()
-                        }
-                        catch(e)
-                        {
-                            this.error['other'] = err;
-                        }
-                console.log(this.error)
+            .catch(err =>{
+                
+                err.json().then(json => {
+                    this.error = json
+                });
             })
             //this.$store.commit({type: 'logUser', token: this.token, username: this.username})
         }

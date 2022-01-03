@@ -67,6 +67,9 @@
 
                                                 </span>
                                             </li>
+                                             <li class="flex items-center py-3">
+                                                <span class="text-white rounded bg-purple-600 text-xl" v-on:click="editing = !editing" >Edytuj</span>
+                                            </li>
                                                                     
                                             </ul>
                                     </div>
@@ -81,10 +84,18 @@
                                                 <i class="text-purple-800 fas fa-dice-d20"></i>
                                                 <span class="tracking-wide">Opis</span>
                                                 </div>
-                                                <div class="text-gray-700">
+                                                <div v-if="!editing" class="text-gray-700">
                                                     <p class="text-2xl font-bold break-words">
                                                         {{game.description}}
                                                     </p>
+                                                </div>
+                                                <div v-if="editing" class="text-gray-700">
+                                                    <div class="mx-2 rounded-md shadow-md -space-y-px">    
+                                                        <textarea type="text" name="description" v-model="game.description" class="appearance-none text-center rounded relative block w-full px-2 py-2 border border-purple-800 placeholder-gray-600 text-gray-900 focus:text-left focus:outline-none focus:ring-green-600 focus:border-green-600 focus:z-10 lg:text-3xl md:text-2xl sm:text-xl" placeholder="game.description"></textarea>
+                                                        <button type="submit" v-on:click="changeDescription()" class=" py-2  sm:py-4  rounded-xl min-w-full bg-white border border-purple-800 boreder-1 items-center justify-center hover:bg-purple-900 hover:text-white lg:text-3xl sm:text-2xl font-bold shadow-md">  
+                                                            <span type="text" name="email" class="" placeholder="Email" > Zapisz </span> 
+                                                        </button>
+                                                    </div>
                                                 </div>
                                                                     
                                             </div>  
@@ -185,11 +196,12 @@ export default {
                 confirm_deletation: false,
                 handout_to_delete: null,
                 delete_ok: false,
+                editing: false,
             }
     },
     watch:{
         handouts_pointer(val, oldval){
-                if(val + 3 > this.handouts_number){ val = Math.max(0,this.handouts_number - 3); this.handouts_pointer = this.handouts_number - 3;}
+                if(val + 3 > this.handouts_number){ val = Math.max(0,this.handouts_number - 3); this.handouts_pointer = Math.max(0,this.handouts_number - 3);}
                 if(val < 0) {val = 0; this.handouts_pointer = 0;}
                 this.actual_handouts = this.game.game_handouts.slice(0 + val, 3 + val);
                 
@@ -199,6 +211,32 @@ export default {
         this.getGameData();
     },
     methods:{
+        changeDescription(){
+            this.ok = false; 
+            const requestOptions = {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Token ${this.$store.state.user.token}`,
+                },
+                body: JSON.stringify({description: this.game.description})
+            }
+            fetch(`http://localhost:8000/api/games/${this.game_slug}/`, requestOptions)
+            .then((res) => {
+                if (res.status == 201)
+                {
+                    return res.json();
+                }
+                else throw res;
+            })
+            .then((res) =>{
+                this.game = res;
+                this.ok = true;
+            })
+            .catch((err) => {
+                        console.log(err)
+                });
+        },
         closeModal(){
             this.show_form = false;
         },
@@ -270,8 +308,14 @@ export default {
                 })
                 .then((res) => {
                     this.delete_ok = true;
+                    let id = this.handout_to_delete.id;
+                    this.game.game_handouts = this.game.game_handouts.filter(function( obj ){
+                        return obj.id !== id;
+                    })
                     this.handout_to_delete = null;
                     this.confirm_deletation = false;
+                    this.handouts_pointer-=1;
+                    this.handouts_number -=1;
                     
                 })
                 .catch((err) => {
@@ -304,8 +348,10 @@ export default {
                     this.game.game_handouts.push(response)
                     this.closeModal()
                     this.upload_ok = true;
-                    this.handouts_pointer = 0;
+                   
                     console.log(this.actual_handouts)
+                    this.handouts_pointer-=1;
+                    this.handouts_number +=1;
             }))
             .catch(err => {
                 console.log(err)

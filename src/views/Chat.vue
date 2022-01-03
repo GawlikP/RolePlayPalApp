@@ -26,11 +26,11 @@
                                             class="bg-white text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                                             <li>
 												<div class=" w-full  bg-grey-lighter px-3 py-2 border-bottom  border-purple-300 ">
-													<h3 class="w-full text-center text-xl text-black font-bold"> {{game_name}}</h3>
+												
 												</div>
 											
 													<div class=" grow overflow-y-scroll flex flex-col items-center mx-2 my-2 h-80 rounded shadow-xl" >						
-														<p v-for="(index, value) in chat_data " :key="value" class="inline-block shadow  border py-1  lg:text-xl md:text-md sm:text-sm break-all  min-w-full" >
+														<p v-for="(index, value) in chat_data " :key="value" class="inline-block shadow  border py-1  lg:text-sm md:text-md sm:text-sm break-all  min-w-full" >
 														<ProfileIcon v-bind:user_id="index.user_id" class=" sm:w-16 sm:w-16" /><b>{{index.username}}</b>:<span class="">{{index.message}}</span> 
 														</p> 
 													</div>
@@ -39,7 +39,7 @@
 														<input type="submit" v-on:click="sendMessage()" value=">" class="col-span-1   w-full bg-purple-600 hover:bg-purple-800 text-gray-100 rounded"/>
 													</div>
 											</li>
-											<li>
+											<li v-if="game.game_master.id == this.$store.state.user.id">
 												<div class="w-full mx-2  rounded-xl items-center justify-center py-2">
 													<select v-model="actual_handout" class="block appearance-none lg:text-2xl md:text-xl sm:text-xl  w-full bg-white border border-purple-400 hover:border-purple-800 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
 															<option v-for="handout in game.game_handouts" v-bind:value="handout" v-bind:key="handout.id">
@@ -66,7 +66,7 @@
                                                 </div>
                                                 <div class="text-gray-700 text-center">
                                                     <p class="text-2xl text-center font-bold break-words">
-                                                        {{actual_handout.name}}
+                                                        {{showing_handout.name}}
                                                     </p>
                                                 </div>
                                                                     
@@ -83,7 +83,7 @@
                                                         <div  class="min-w-full flex flex-col">
                                                             
                                                             <img class="object-scale-down max-h-80 "
-                                                            :src="actual_handout.get_image"
+                                                            :src="showing_handout.get_image"
                                                             alt="Sunset in the mountains">
                                                             
                                                             
@@ -133,7 +133,7 @@ Profile
 			room_key: this.$route.params.name,
 			name: this.$route.params.name,
 			game_name: "",
-			chatSocket: {},
+			chatSocket: null,
 			chat_text: ``,
 			input_text: "",
 			chat_data: [],
@@ -143,6 +143,7 @@ Profile
 			game: {},
 			chat_buffer: {},
 			actual_handout: '',
+			showing_handout: {},
 			
 		}
 	},	
@@ -161,6 +162,15 @@ Profile
 				
 			}
 		},
+		actual_handout(newdata, olddata){
+			if(newdata != null){
+				if(this.chatSocket != null && !this.loading )
+				{	
+					console.log("changed")
+					this.updateHandout(newdata);
+				}
+			}
+		},
 		
 	},
 	
@@ -174,6 +184,13 @@ Profile
 				//console.log(data)
 			
 				self.chat_buffer = data.message;
+				console.log(data.message.new_handout)
+				if (data.message.new_handout){
+				self.showing_handout = self.game.game_handouts.filter(function (el) {
+					return el.id ==  data.message.new_handout
+				})[0];}
+				console.log(self.showing_handout)
+
 				//this.getMessage(data) 
 				
 			}
@@ -188,6 +205,7 @@ Profile
 				//console.log(event)
 				self.chat_text += "Connnected! \n"
 			//	self.connected = true;
+				self.loading = false;
 			}
 
 			
@@ -199,6 +217,10 @@ Profile
 		sendMessage(){
 			this.chatSocket.send(JSON.stringify({'message': this.input_text}))
 			this.input_text = '';
+		},
+		updateHandout(handout){
+		
+			this.chatSocket.send(JSON.stringify({'message': 'Zmieniono Handout', 'handout': handout.id}))
 		},
 		getGameData(){
 				this.loading = true;
@@ -229,8 +251,10 @@ Profile
 						console.log("200 OK!")
 						this.game = response;
 						this.game_name = this.game.name;
-						if(this.game.game_handouts.length > 0) this.actual_handout = this.game.game_handouts[4];
-						this.loading = false;
+						if(this.game.game_handouts.length > 0) {
+							this.actual_handout = this.game.game_handouts[0];
+							this.showing_handout = this.game.game_handouts[0];
+						}
 						console.log("data stored")
 					
 						
@@ -244,7 +268,7 @@ Profile
                     this.errors = err;
                 }
 					console.log(this.errors)
-					this.loading = false;
+					
 				})
 				
 		}
