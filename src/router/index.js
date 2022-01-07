@@ -32,10 +32,10 @@ const routes = [
 		props: true,
 	},
   {
-		path: '/forum/:page',
+		path: '/forum',
 		name: 'Forum',
 		component: () => import('@/views/Forum.vue'),
-		props: true,
+	
   
 	},
   {
@@ -64,6 +64,11 @@ const routes = [
     name: 'GamePanel',
     component: () => import('@/views/GamePanel'),
     props: true,
+  },
+  {
+    path: '/messages',
+    name: 'Messages',
+    component: () => import('@/views/Messages')
   }
 
 ]

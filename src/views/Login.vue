@@ -1,7 +1,7 @@
 <template>
     <div id="Login">
         <div class="container  min-h-screen min-w-full items-center justify-center" >
-            <NavigationBar :key="componentKey" />
+            <NavigationBar />
                 <div class="grid grid-cols-3 gap-4 flex min-w-full my-8">
                 <div></div>
                 <div class="grid grid-cols-1 gap-4 flex min-w-full my-8 md:col-span-3 lg:col-span-1 col-span-3">

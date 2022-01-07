@@ -1,8 +1,7 @@
 <template>
     <div class="flex space-x-2" id="ProfileIcon" v-on:click="$router.push({ name: 'Profile', params: { slug: profile.slug}})" >
-
-        <div class="relative w-12 h-12 inline-block">
-            <i v-if="!ok" class="text-4xl text-center font-bold  min-w-full fas fa-user"></i><img  v-if="ok" class="w-12 h-12 mx-auto rounded-full" :src="profile.get_thumbnail" alt="user image" />   
+        <div class="relative w-12 h-12  inline-block">
+            <i v-if="!ok" class="text-center font-bold  min-w-full fas fa-user"></i><img  v-if="ok" class="w-12 h-12 mx-auto rounded-full" :src="profile.get_thumbnail" alt="user image" />   
         </div>
     </div>
 </template>
@@ -10,7 +9,7 @@
 
 
 export default({
-    name: 'ProfileIcon',
+    name: 'ProfileIconResized',
       props: {
         user_id: Number
     },

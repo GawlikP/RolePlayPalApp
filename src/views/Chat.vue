@@ -1,43 +1,44 @@
 <template>
-    <div id="GamePanel" class="max-w-screen max-h-screen">
+    <div id="Chat" class=" w-screen h-screen" ref="chatpanel">
         <NavigationBar />
         <div class="flex w-full h-full">
           
-            <div class="min-w-full mx-4  flex">
+            <div class="min-w-full min-h-full mx-4  flex">
 
                 <p v-if="loading"> Loading... </p>
                 
-                <div id="data-section" class="min-w-full" v-if="!loading ">
+                <div id="data_section" class="min-w-full min-h-full" v-if="!loading ">
 
 
                     <div class=" mx-auto  p-5 min-w-full">
-                        <div class="md:flex no-wrap md:-mx-2 ">
+                        <div  class="md:flex no-wrap md:-mx-2 " id="info-box" ref="infoBox">
                                                     
                             <div class="w-full md:w-3/12 md:mx-2">
                                                        
                                 <div class="bg-white p-3 border-t-4 border-b-2 shadow  border-purple-600 ">
                                     <div class="image overflow-hidden">
-                                        
+                                       
                                         </div>
                                             <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">Rozgrywka:</h1>
                                             <h3 class="text-gray-600 font-lg text-semibold leading-6"></h3>
                                             <p class="text-xl text-black hover:text-gray-600 leading-6 break-words">{{game.name}}</p>
+											 <button class="text-black " v-on:click="getChatHeight()" >TEST</button>
                                             <ul
-                                            class="bg-white text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
-                                            <li>
-												<div class=" w-full  bg-grey-lighter px-3 py-2 border-bottom  border-purple-300 ">
-												
-												</div>
-											
-													<div class=" grow overflow-y-scroll flex flex-col items-center mx-2 my-2 h-80 rounded shadow-xl" >						
+                                            class="max-h-5/6 bg-white text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm overflow-hidden">
+                                            <li  >
+													
+													<div class=" grow overflow-y-scroll flex flex-col items-center mx-2 my-2  rounded shadow-xl" style="height: 500px"
+													 :style="{'height': `${getChatHeight()}px`}" :key="chat_height">						
 														<p v-for="(index, value) in chat_data " :key="value" class="inline-block shadow  border py-1  lg:text-sm md:text-md sm:text-sm break-all  min-w-full" >
-														<ProfileIcon v-bind:user_id="index.user_id" class=" sm:w-16 sm:w-16" /><b>{{index.username}}</b>:<span class="">{{index.message}}</span> 
+														<ProfileIconResized v-bind:profile_slug="null" v-bind:profile_image="index.thumbnail" class=" sm:w-16 sm:w-16" /><b>{{index.username}}</b>:<span class="">{{index.message}}</span> 
 														</p> 
 													</div>
-													<div class="  w-full  grid grid-cols-7 ">
+											</li>
+											<li> 
+												<div class="  w-full  grid grid-cols-7 ">
 														<input v-model="input_text" type="text" class="col-span-6 min-w-full appearance-none text-left rounded   border border-purple-800 placeholder-gray-600 text-gray-900 focus:text-left focus:outline-none focus:ring-green-600 focus:border-green-600 focus:z-10 md:text-2xl sm:text-xl" id="inputs_area"/>
 														<input type="submit" v-on:click="sendMessage()" value=">" class="col-span-1   w-full bg-purple-600 hover:bg-purple-800 text-gray-100 rounded"/>
-													</div>
+														</div>
 											</li>
 											<li v-if="game.game_master.id == this.$store.state.user.id">
 												<div class="w-full mx-2  rounded-xl items-center justify-center py-2">
@@ -118,13 +119,13 @@
 </template>
 <script>
 import NavigationBar from '@/components/NavigationBar.vue'
-import ProfileIcon from '@/components/Profiles/ProfileIconComponent.vue'
+import ProfileIconResized from '@/components/Profiles/ProfileIconComponentResized.vue'
 import Profile from './Profile.vue'
 export default {
 	name: 'Chat',
 	components: {
 		NavigationBar,
-		ProfileIcon
+		ProfileIconResized
 	},
 	data(){
 Profile
@@ -144,12 +145,17 @@ Profile
 			chat_buffer: {},
 			actual_handout: '',
 			showing_handout: {},
+			chat_height: 0,
 			
 		}
 	},	
-	mounted(){
+	created(){
 		this.getGameData();
 		this.setupChat();
+	
+	},
+	mounted(){
+		this.getChatHeight();
 	},
 	watch:{
 		'$route': 'getGameData',
@@ -172,9 +178,29 @@ Profile
 			}
 		},
 		
+		'$refs.infoBox.chatpanel ' () {
+				console.log("test")
+				let height = this.$refs.infoBox.clientHeight 
+				console.log("height: " + height.toString())
+				this.chat_height = height * 5/8;
+		}
+		
 	},
-	
+	computed: {
+		
+	},
 	methods: {
+		getChatHeight(){
+			if(this.$refs.chatpanel === undefined) {
+				console.log('0')
+				return 0;
+			}
+			let height = this.$refs.chatpanel.clientHeight 
+			console.log("height: " + height.toString())
+			this.height =  height * 5/8;
+			return this.height;
+		
+		},
 		setupChat(){
 			this.loading = true;
 			this.chatSocket = new WebSocket('ws://localhost:8000'+'/ws/chat/' + this.name + '/'+`?authorization=${this.$store.state.user.token}`);
@@ -182,7 +208,7 @@ Profile
 			this.chatSocket.onmessage = function(e){
 				const data = JSON.parse(e.data);
 				//console.log(data)
-			
+					console.log(data.message.thumbnail)
 				self.chat_buffer = data.message;
 				console.log(data.message.new_handout)
 				if (data.message.new_handout){

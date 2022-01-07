@@ -11,7 +11,7 @@
             </div>
           <div></div>
         </div>
-        <PostRecentComponent v-bind:page_number="page"/>
+        <PostRecentComponent />
        
       </div>
     </main>
@@ -30,7 +30,7 @@ export default {
    
   data(){
         return {
-            page: this.$route.params.page,
+            
             ok: false, 
             loading: false,
             profile: {},
