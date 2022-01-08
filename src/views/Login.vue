@@ -42,11 +42,17 @@
                     <div>
                         <div class="my-4 mx-2  rounded-xl lg:my-4 sm:my-6">
                             <div class="rounded-md grid grid-cols-2 gap-4 shadow-md text-center -space-y-px ">
-                            <div>    
-                                <p class="text-bold text-3xl text-center ">   <i class="fas fa-sign-in-alt"></i></p>
+                            <div> 
+                                 <p class="text-bold text-3xl text-center has-tooltip" v-on:click="$router.push({ name: 'Register'})"> 
+                                    <i class="fas fa-sign-in-alt "></i>   
+                                    <span class="tooltip text-sm xl:text-xl lg:text-md md:text-md sm:text-md xs:text-sm mx-2 rounded bg-purple-800 text-white"> Zarejestruj się! </span>
+                                </p>   
                             </div>
                             <div>
-                                <p class="text-bold text-3xl text-center "> <i class="fas fa-question-circle "></i>   </p>
+                                <p class="text-bold text-3xl text-center has-tooltip" v-on:click="$router.push({ name: 'ForgotPassword'})"> 
+                                    <i class="fas fa-question-circle "></i>   
+                                    <span class="tooltip text-sm xl:text-xl lg:text-md md:text-md sm:text-md xs:text-sm mx-2 rounded bg-purple-800 text-white"> Zapomniałeś hasła? </span>
+                                </p>
                             </div>
                             </div>
                         </div>

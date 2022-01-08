@@ -1,7 +1,7 @@
 <template>
- <div id="Messages"  class="container min-h-full min-w-full">
+ <div id="Messages"  class="min-h-screen min-w-screen " ref="messagespanel">
         <NavigationBar />
-        <div class="flex w-full h-full">
+        <div class="container min-w-full h-full">
             <div id="ConfirmDeleteModal" v-if="error && error.errors && error.errors.messagecredential !== undefined" class="flex overflow-y-auto overflow-x-hidden fixed right-0 left-0 top-0 z-50 justify-center  h-modal md:h-full md:inset-0">
                 <div class="relative px-4 w-full max-w-2xl h-full md:h-auto justify-center ">
                     <div class="bg-slate-800 bg-opacity-50 fluid justify-center  w-full  absolute top-0 right-0 bottom-0 left-0">
@@ -52,25 +52,29 @@
             <div v-else class="min-w-full min-h-full  container">
                 <p v-if="loading"> Loading... </p>
                 <div id="data-section" class="min-w-full min-h-full" v-if="!loading">
-                    <div class=" mx-auto  p-5 min-w-full min-h-full">
-                        <div class="h-full md:flex no-wrap md:-mx-2 ">
+                    <div class=" mx-auto  py-3 min-w-full min-h-full">
+                        <div class="min-h-full md:flex no-wrap md:-mx-2 ">
                                                     
-                            <div class="w-full h-full md:w-3/12 md:mx-2">
+                            <div class="w-full min-h-full md:w-3/12 md:mx-2">
                                                        
                                 <div class="h-full bg-violet-200 p-3 border-t-4 border-violet-700">
                                             <h1 class="text-violet-900 font-bold text-xl leading-8 ">Wiadomości</h1>
                                             <ul
-                                            class="h-full bg-violet-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
-                                            <li class="h-20 flex flex-col py-1">
+                                            class="h-full bg-violet-100 text-gray-600 hover:text-gray-700 hover:shadow py-2  divide-y rounded shadow-sm">
+                                            <li class="flex flex-col py-1">
                                              
                                                  <ProfileSearchingComponent @send="loadChat"/>
                                             </li>
-                                            <li class="h-10 flex flex-col py-3">
-                                            <span>Ostatnie osoby:</span>
+                                            <li class="flex flex-col py-3">
+                                            <p class="inline-block w-full bg-violet-800 text-violet-100 rounded-xl py-1 text-center font-bold"> Oczekujące </p>
                                             </li>
-                                            <li class="h-60 flex flex-col py-3">
-                                               <p> TEST</p>
-                                               <p> TEST 2 </p>
+                                            <li class="w-full flex flex-col py-3">
+                                                <p v-if="pending_response_status == 404" class="w-full rounded bg-violet-700 text-white "> Brak oczekujących </p> 
+                                                <div v-if="pending_response_status == 200" id="recent_container" class="w-full overflow-y-auto flex flex-col" :style="{'height': `${getChatHeight()*3/4}px`}" :key="chat_height">
+                                                    <p  v-for="(pending, index) in pending_messages" :key="pending.id" class=" inline-block flex  py-1 border-t-2 border-violet-700 text-violet-800 bg-white" v-on:click="loadChat(pending.sender_user.profile)">
+                                                        <ProfileIconResized v-bind:profile_slug="null" v-bind:profile_image="pending.sender_user.profile.get_thumbnail"  /> Nieprzeczytana wiadomość 
+                                                    </p>
+                                                </div>
                                             </li>
                                              
                                                                     
@@ -86,21 +90,17 @@
                                                 <div class="flex items-center space-x-2 font-bold leading-8 text-3xl">
                                                 <p class="w-full text-left"><i class="fas fa-comment-alt"></i> Chat</p>
                                                 </div>
-                                                <div class="text-gray-700">
-                                                    <p class="text-2xl font-bold break-words">
-                                                      
-                                                    </p>
-                                                </div>
                                                
                                                                     
                                             </div>  
-                                            <div class="w-full h-96 my-1 bg-violet-100 text-violet-900 shadow-xl rounded-xl border-violet-800">
+                                            <div class="w-full h-full my-1 bg-violet-100 text-violet-900 shadow-xl rounded-xl border-violet-800">
                                                     <div class="w-full h-full px-1 py-1"> 
-                                                        <div class="h-80 w-full"> 
+                                                        <div class="w-full" :style="{'height': `${getChatHeight()}px`}" :key="chat_height"> 
                                                                     <div v-if="chat_loading" class="h-full flex items-centered justify-center content-center text-violet-900"> <h1 class="text-3xl font-bold"><i class="fas fa-comment-dots"></i>...</h1> </div>
                                                                     <div v-if="!chat && !chat_loading" class="h-full flex items-centered justify-center content-center text-violet-900"> <h1 class="text-3xl font-bold">...</h1> </div>
                                                                     <div id="chat_container" class="w-full overflow-y-auto h-full flex flex-col" v-if="!chat_loading && chat && credentials_status == 'A'">
-                                                                        <p v-for="(message, index) in chat" v-bind:key="index" v-bind:class="{'text-right': message.sender_user.id == profile.user, 'text-left': message.sender_user.id != profile.user}" class="py-1 w-full  right-0 px-1"><span class="inline-block  rounded fluid bg-violet-700 text-violet-100 px-1"> <div class="inline flex "><ProfileIconResized v-bind:profile_slug="message.sender_user.profile_slug" v-bind:profile_image="message.sender_user.profile_thumbnail" class="px-1"/>{{message.text}} </div></span></p>
+                                                                        <p v-for="(message, index) in chat" v-bind:key="index" v-bind:class="{'text-right flex-row-reverse': message.sender_user.id == profile.user, 'text-left flex-row': message.sender_user.id != profile.user}" 
+                                                                        class="py-1 flex  w-full   px-1" ><div class="w-3/4"><span  v-bind:class="{'text-white bg-violet-800': message.sender_user.id == profile.user, 'bg-violet-400 text-black': message.sender_user.id != profile.user}" class="inline-block  rounded fluid  px-2 "> <div class="inline flex "><ProfileIconResized v-bind:profile_slug="message.sender_user.profile.slug" v-bind:profile_image="message.sender_user.profile.get_thumbnail" class="px-1"/>{{message.text}} </div></span></div></p>
                                                                         <p class="w-full py-5"></p>
                                                                     </div>
                                                         </div>
@@ -148,21 +148,36 @@ export default {
                 input_text: '',
                 credentials_status: 'loading',
                 credentials: null,
+                chat_height: 100,
+                pending_messages: null,
+                pending_response_status: null,
         }
     },
     created(){
         this.getProfile()
+        this.getPendingMessages()
     },
     watch: {
         '$route':'getProfile',
         chat_buffer(newdata,olddata){
 			if(newdata.message )
 			{
-				this.chat.push({text: newdata.message, sender_user:{id: newdata.user_id, profile_thumbnail: newdata.thumbnail}});
+				this.chat.push({text: newdata.message, sender_user:{id: newdata.user_id, profile:{get_thumbnail: newdata.thumbnail}}});
 			}
 		},
     },
     methods: {
+        getChatHeight(){
+			if(this.$refs.messagespanel === undefined) {
+				
+				return 0;
+			}
+			let height = this.$refs.messagespanel.clientHeight 
+		
+			this.height =  height * 5/8;
+			return this.height;
+		
+		},
         scrollToBottom() {
             const container = this.$el.querySelector("#chat_container");
             container.scrollTop = container.scrollHeight + 40;
@@ -196,10 +211,42 @@ export default {
           }
         })
       },
+      getPendingMessages(){
+          this.loading = true;
+        const requestOptions = {
+          method: "GET",
+          headers: {"Content-Type": "application/json",
+          "Authorization": `Token ${this.$store.state.user.token}`}
+        }
+        fetch(`http://localhost:8000/api/private_messages/me/recent/`, requestOptions)
+        .then((res)=>{
+            if(res.status == 200){
+                this.pending_response_status = 200;
+                return res.json();
+            }else if (res.status == 404){
+                return res.json()
+            }else {
+                return res;
+            }
+        })
+        .then((res) => {
+            this.pending_messages = res;
+       
+            this.loading = false;
+        })
+        .catch((err) => {
+            this.pending_messages = null;
+            err.json().then(json => {
+                                    this.error = json
+                                });
+        })
+      },
         loadChat(profile){
             this.chat_loading = true;
             this.chat = null
             this.actual_profile = profile;
+            
+       
         const requestOptions = {
             method: "GET",
             headers: {
@@ -251,7 +298,7 @@ export default {
 			this.chatSocket.onmessage = function(e){
 				const data = JSON.parse(e.data);
 				//console.log(data)
-			
+          
 				self.chat_buffer = data.message;
                 self.scrollToBottom()
 
@@ -305,7 +352,7 @@ export default {
                         
                         if(this.credentials.errors) this.credentials = {};
                         else {this.credentials_status = this.credentials.status;}
-                        console.log(this.credentials_status)
+                  
                         this.chat_loading = false
                         return this.credentials
                     
@@ -355,7 +402,7 @@ export default {
                         
                         if(this.credentials.errors) this.credentials = {};
                         else {this.credentials_status = this.credentials.status;}
-                        console.log(this.credentials)
+              
                         this.chat_loading = false
                         return this.credentials
                     

@@ -15,7 +15,7 @@
                                                     
                             <div class="w-full md:w-3/12 md:mx-2">
                                                        
-                                <div class="bg-white p-3 border-t-4 border-b-2 shadow  border-purple-600 ">
+                                <div class="bg-white py3 border-t-4 border-b-2 shadow  border-purple-600 ">
                                     <div class="image overflow-hidden">
                                        
                                         </div>
@@ -24,14 +24,25 @@
                                             <p class="text-xl text-black hover:text-gray-600 leading-6 break-words">{{game.name}}</p>
 											 <button class="text-black " v-on:click="getChatHeight()" >TEST</button>
                                             <ul
-                                            class="max-h-5/6 bg-white text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm overflow-hidden">
+                                            class="max-h-5/6 bg-white text-gray-600 hover:text-gray-700 hover:shadow py-2 mt-3 divide-y rounded shadow-sm overflow-hidden">
                                             <li  >
 													
-													<div class=" grow overflow-y-scroll flex flex-col items-center mx-2 my-2  rounded shadow-xl" style="height: 500px"
+													<div class="min-w-full grow overflow-y-scroll flex flex-col items-center  my-2  rounded shadow-xl" style="height: 500px"
 													 :style="{'height': `${getChatHeight()}px`}" :key="chat_height">						
-														<p v-for="(index, value) in chat_data " :key="value" class="inline-block shadow  border py-1  lg:text-sm md:text-md sm:text-sm break-all  min-w-full" >
-														<ProfileIconResized v-bind:profile_slug="null" v-bind:profile_image="index.thumbnail" class=" sm:w-16 sm:w-16" /><b>{{index.username}}</b>:<span class="">{{index.message}}</span> 
-														</p> 
+														<div v-for="(message, value) in chat_data " :key="value" class="inline-block min-w-full" >
+															
+															<p v-if="message.result === undefined && message.new_handout === ''" class="inline-block shadow flex  border py-1  lg:text-sm md:text-md sm:text-sm break-all  min-w-full"><ProfileIconResized v-bind:profile_slug="null" v-bind:profile_image="message.thumbnail" class=" sm:w-16 sm:w-16" /><span class=""><b>{{message.username}}</b>:{{message.message}}</span> </p> 
+															<p v-if="message.result === undefined && message.new_handout" class="inline-block shadow flex flex-col border py-1  lg:text-sm md:text-md sm:text-sm break-all  min-w-full rounded-xl bg-violet-700 text-white">
+																<p class="inline-block flex w-full font-bold"><ProfileIconResized v-bind:profile_slug="null" v-bind:profile_image="message.thumbnail" class=" sm:w-16 sm:w-16" /><span class=""><b>{{message.username}}</b></span></p>
+																<p class="w-full text-center lg:text-xl md:text-md sm:text-md font-bold">{{message.message}}</p> 
+															</p> 
+															<p v-if="message.result" class="inline-block shadow flex flex-col bg-violet-800 text-white border py-1  lg:text-sm md:text-md sm:text-sm break-all  min-w-full rounded">
+																<p class="inline-block flex"><ProfileIconResized v-bind:profile_slug="null" v-bind:profile_image="message.thumbnail" class=" sm:w-16 sm:w-16" /> <b>{{message.username}}</b>:<span class="font-bold"> WYKONAŁ RZUT</span></p>
+																<p class="text-center font-bold"><span>Wynik: {{message.result}} </span></p> 
+																<p class="font-bold py-1 text-center" v-for="(roll, value) in message.rolls" :key="value"> <i class="fas fa-dice-d20"></i> {{roll}}:{{message.rolls_end[value]}} </p>
+															</p> 
+															
+														</div> 
 													</div>
 											</li>
 											<li> 
@@ -182,7 +193,7 @@ Profile
 				console.log("test")
 				let height = this.$refs.infoBox.clientHeight 
 				console.log("height: " + height.toString())
-				this.chat_height = height * 5/8;
+				this.chat_height = height * 4/8;
 		}
 		
 	},
@@ -197,7 +208,7 @@ Profile
 			}
 			let height = this.$refs.chatpanel.clientHeight 
 			console.log("height: " + height.toString())
-			this.height =  height * 5/8;
+			this.height =  height * 4/8;
 			return this.height;
 		
 		},

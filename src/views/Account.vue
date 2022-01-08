@@ -72,21 +72,29 @@
                                             <div class=" mx-2  rounded-xl items-center justify-center">
                                             <div class="rounded-md shadow-md -space-y-px my-1 lg:text-2xl md:text-xl sm:text-xl">    
                                                 <label for="title" class=" font-bold lg:text-2xl md:text-xl sm:text-xl text-center  block placeholder-gray-600 text-gray-900"> Podaj nowe hasło</label>
-                                                <input type="text" name="title" autocomplete="title" v-model="newpassword" class="appearance-none py-2 text-center rounded relative block w-full px-2  border border-purple-800 placeholder-gray-600 text-gray-900 focus:text-left focus:outline-none focus:ring-green-600 focus:border-green-600 focus:z-10 lg:text-2xl md:text-xl sm:text-xl" placeholder="Hasło" /> 
+                                                <input type="password" name="title" autocomplete="title" v-model="new_password" class="appearance-none py-2 text-center rounded relative block w-full px-2  border border-purple-800 placeholder-gray-600 text-gray-900 focus:text-left focus:outline-none focus:ring-green-600 focus:border-green-600 focus:z-10 lg:text-2xl md:text-xl sm:text-xl" placeholder="Hasło" /> 
                                             </div>
                                             </div>
                                         </div>
-                                        <div class="flex iems-center justify-center min-w-full lg:my-1 sm:my-8">
-                                            <button type="submit" v-on:click="addPost()" class="my-4 mx-4  sm:py-4  rounded-xl min-w-full bg-white border border-purple-600 boreder-1 items-center justify-center bg-purple-600  text-gray-200 hover:bg-purple-600 lg:text-2xl sm:text-xl font-bold shadow-md">  
+                                        <div>
+                                            <div class=" mx-2  rounded-xl items-center justify-center">
+                                            <div class="rounded-md shadow-md -space-y-px my-1 lg:text-2xl md:text-xl sm:text-xl">    
+                                                <label for="title" class=" font-bold lg:text-2xl md:text-xl sm:text-xl text-center  block placeholder-gray-600 text-gray-900"> Potwierdź stare hasło</label>
+                                                <input type="password" name="title" autocomplete="title" v-model="old_password" class="appearance-none py-2 text-center rounded relative block w-full px-2  border border-purple-800 placeholder-gray-600 text-gray-900 focus:text-left focus:outline-none focus:ring-green-600 focus:border-green-600 focus:z-10 lg:text-2xl md:text-xl sm:text-xl" placeholder="Hasło" /> 
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-center min-w-full lg:my-2 sm:my-1">
+                                            <button type="submit" v-on:click="changePassword()" class="my-4 mx-4  sm:py-4  rounded-xl min-w-full bg-white border border-purple-600 boreder-1 items-center justify-center bg-purple-600  text-gray-200 hover:bg-purple-600 lg:text-2xl sm:text-xl font-bold shadow-md">  
                                                 <span type="text"  > Zmien Hasło </span> 
                                             </button>
                                         </div>
                                         </div>
-                                        <div id="error message" v-if="error">
+                                        <div id="error message" v-if="change_password_errors && change_password_errors.error">
                                         <div class="my-4 mx-2 bg-red-200 rounded-xl lg:my-4 sm:my-6">
                                             <div class="rounded-md bg-red-200 shadow-md  -space-y-px ">
                                             
-                                                <span class="text-bold lg:text-2xl md:text-xl sm:text-lg text-left font-bold text-red-600 "><div v-for="(value, name) in error" :key="name">
+                                                <span class="text-bold lg:text-2xl md:text-xl sm:text-lg text-left font-bold text-red-600 "><div v-for="(value, name) in change_password_errors.error" :key="name">
                                                     <i class="fas fa-exclamation-circle"></i> {{name}} : {{value}}<br> 
                                                     </div>
                                                 
@@ -96,11 +104,11 @@
                                          
                                     </div>
                                     
-                                        <div id="done" v-if="ok">
-                                        <div class="my-4 mx-2 bg-green-200 rounded-xl lg:my-4 sm:my-6">
+                                        <div id="done" v-if="change_password_ok">
+                                        <div class="my-2 mx-2 bg-green-200 rounded-xl lg:my-4 sm:my-2">
                                             <div class="rounded-md bg-green-200 shadow-md  -space-y-px ">
                                             
-                                                <p class="text-bold lg:text-2xl md:text-xl sm:text-lg text-left font-bold text-center text-green-600 "><i class="fas fa-check-circle"></i> Dodano twój post!</p>
+                                                <p class="text-bold lg:text-2xl md:text-xl sm:text-lg text-left font-bold text-center text-green-600 "><i class="fas fa-check-circle"></i> Zmiana hasła powiodła się</p>
                                             </div>
                                         </div>
                                     </div>
@@ -241,7 +249,11 @@ export default{
             dropPassword: false,
             dropUsername: false,
             dropAvatar: false,
-            newpassword: '',
+            new_password: '',
+            old_password: '',
+            change_password_errors: {error: null},
+            change_password_ok: false,
+            change_password_response: null,
             newusername: '',
            
             profile_error: {},
@@ -267,6 +279,35 @@ export default{
             '$route': 'fetchData'
         },
     methods :{
+            changePassword(){
+                this.change_password_ok = false;
+                this.change_password_errors.error = [];
+                if(this.new_password === '') {this.change_password_errors.error.push({new_password: "Nie wypełniono pola!"}); return;}
+                if(this.old_password === '') {this.change_password_errors.error.push({old_password: "Nie wypełniono pola!"}); return;}
+                const requestOptions = {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json","Authorization": `Token ${this.$store.state.user.token}`},
+                    body: JSON.stringify({"new_password": this.new_password, "old_password": this.old_password})
+                }
+                fetch(`http://localhost:8000/api/profiles/me/set_password/`, requestOptions)
+                .then((res)=> {
+                    if(res.status == 201){
+                        return res.json();
+                    }else{
+                        throw res;
+                    }
+                })
+                .then((res) =>{
+                        this.change_password_response = res;
+                        this.change_password_ok = true;
+                        this.change_password_errors.error = null;
+                })
+                .catch((err) =>{
+                     err.json().then(json => {
+                        this.change_password_errors = json;
+                    });
+                })
+            },
             fetchData(){
                     const user = this.$store.state.user.username;
                     const requestOptions = {

@@ -69,6 +69,11 @@ const routes = [
     path: '/messages',
     name: 'Messages',
     component: () => import('@/views/Messages')
+  },
+  {
+    path: '/forgot',
+    name: 'ForgotPassword',
+    component: () => import('@/views/ForgotPassword')
   }
 
 ]
@@ -80,7 +85,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   
-  if (to.name !== 'Login' && to.name !=='Register' && !store.state.user.isAuthenticated) { 
+  if (to.name !== 'Login' && to.name !=='Register' && to.name !=='ForgotPassword' && !store.state.user.isAuthenticated) { 
       next({
         path: 'login',
         replace: true
