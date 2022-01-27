@@ -66,13 +66,13 @@
                                                  <ProfileSearchingComponent @send="loadChat"/>
                                             </li>
                                             <li class="flex flex-col py-3">
-                                            <p class="inline-block w-full bg-violet-800 text-violet-100 rounded-xl py-1 text-center font-bold"> Oczekujące </p>
+                                            <p class="inline-block w-full bg-violet-800 text-violet-100 rounded-xl py-1 text-center font-bold"> Ostatnie </p>
                                             </li>
                                             <li class="w-full flex flex-col py-3">
-                                                <p v-if="pending_response_status == 404" class="w-full rounded bg-violet-700 text-white "> Brak oczekujących </p> 
+                                                <p v-if="pending_response_status == 404" class="w-full rounded bg-violet-700 text-white "> Brak ostatnich wiadomości </p> 
                                                 <div v-if="pending_response_status == 200" id="recent_container" class="w-full overflow-y-auto flex flex-col" :style="{'height': `${getChatHeight()*3/4}px`}" :key="chat_height">
                                                     <p  v-for="(pending, index) in pending_messages" :key="pending.id" class=" inline-block flex  py-1 border-t-2 border-violet-700 text-violet-800 bg-white" v-on:click="loadChat(pending.sender_user.profile)">
-                                                        <ProfileIconResized v-bind:profile_slug="null" v-bind:profile_image="pending.sender_user.profile.get_thumbnail"  /> Nieprzeczytana wiadomość 
+                                                        <ProfileIconResized v-bind:profile_slug="null" v-bind:profile_image="pending.sender_user.profile.get_thumbnail"  /> {{pending.sender_user.username}}
                                                     </p>
                                                 </div>
                                             </li>

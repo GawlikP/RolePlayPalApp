@@ -30,6 +30,7 @@ module.exports = {
       teal: colors.teal,
       sky: colors.sky,
       violet: colors.violet,
+      pink: colors.pink,
     },
     spacing: {
       px: '1px',

@@ -21,15 +21,7 @@
                                
                 
                     <div v-if="game.game_master.profile_slug == profile.slug" id="Nothing_to_show" class="container fluid px-3 min-w-full min-h-10 px-2 py-2 shadow-2xl bg-white text-gray-900 rounded-xl ">
-                       <div class="w-full ">
-                       <p v-on:click="delete_game_dropdown[game.id]= !delete_game_dropdown[game.id]" class="w-full py-4 mx-2 text-xl sm:text-md font-bold text-red-700 text-center "> Usuń rozgrywkę </p>
-                          <div v-if="delete_game_dropdown[game.id]" class="flex flex-col w-full py-2 text-xl sm:text-md font bold text-gray-600 shadow-xl rounded"> 
-                              <p class="w-full text-center"> Czy jesteś pewien, że chcesz usunąć tą rozgrywkę? </p>
-                               <button type="submit" v-on:click="deleteGame(game.slug)" class="my-4   sm:py-4  rounded-xl min-w-full bg-white border border-red-800 border-1 items-center justify-center text-black  hover:text-gray-200 hover:bg-red-600 lg:text-2xl sm:text-xl font-bold shadow-md">  
-                                    <span type="text"  > Usuń </span> 
-                                </button>
-                          </div>
-                       </div>
+                       
                         <p class="break-all text-center font-bold text-2xl  min-w-full bg-white rounded-xl "> Zaproś nowych graczy </p>
                         <p class="text-center font-bold text-2xl min-w-full bg-white rounded-xl">
                             <div>

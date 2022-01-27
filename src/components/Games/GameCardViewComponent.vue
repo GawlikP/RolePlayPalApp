@@ -8,12 +8,14 @@
         <p class="text-gray-700 text-base">
         Opis:  {{this.description}}
         </p>
-        <p v-if="$store.state.user.id == this.game_master.id" v-on:click="$router.push(`/gamepanel/${this.slug}`)" 
-        class="text-purple-700 text-base"> Przejdz do panelu rozgrywki </p>
+       
+        <button v-if="$store.state.user.id == this.game_master.id" type="submit" v-on:click="$router.push(`/gamepanel/${this.slug}`)" class=" rounded-xl min-w-full bg-white border border-purple-800 border-1 items-center justify-center hover:bg-purple-900 hover:text-white lg:text-3xl sm:text-2xl font-bold shadow-md">  
+          <span type="text" name="email" class="" placeholder="Email" > Przejdz do panelu rozgrywki </span> 
+        </button>
         <p class="text-gray-900 text-xl py-1">
          Gracze: 
         </p>
-        <button type="submit" v-on:click="$router.push(`/chat/${this.room_key}`)" class=" rounded-xl min-w-full bg-white border border-purple-800 border-1 items-center justify-center hover:bg-purple-900 hover:text-white lg:text-3xl sm:text-2xl font-bold shadow-md">  
+        <button type="submit" v-on:click="$router.push(`/chat/${this.room_key}`)" class=" rounded-xl min-w-full bg-white border border-pink-800 border-1 items-center justify-center hover:bg-pink-900 hover:text-white lg:text-3xl sm:text-2xl font-bold shadow-md">  
           <span type="text" name="email" class="" placeholder="Email" > Graj </span> 
         </button>
       </div>

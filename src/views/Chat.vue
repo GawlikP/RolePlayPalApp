@@ -22,7 +22,7 @@
                                             <h1 class="text-gray-900 font-bold text-xl leading-8 my-1">Rozgrywka:</h1>
                                             <h3 class="text-gray-600 font-lg text-semibold leading-6"></h3>
                                             <p class="text-xl text-black hover:text-gray-600 leading-6 break-words">{{game.name}}</p>
-											 <button class="text-black " v-on:click="getChatHeight()" >TEST</button>
+											 <button class="text-black " v-on:click="getChatHeight()" >Odśwież</button>
                                             <ul
                                             class="max-h-5/6 bg-white text-gray-600 hover:text-gray-700 hover:shadow py-2 mt-3 divide-y rounded shadow-sm overflow-hidden">
                                             <li  >
@@ -37,7 +37,8 @@
 																<p class="w-full text-center lg:text-xl md:text-md sm:text-md font-bold">{{message.message}}</p> 
 															</p> 
 															<p v-if="message.result" class="inline-block shadow flex flex-col bg-violet-800 text-white border py-1  lg:text-sm md:text-md sm:text-sm break-all  min-w-full rounded">
-																<p class="inline-block flex"><ProfileIconResized v-bind:profile_slug="null" v-bind:profile_image="message.thumbnail" class=" sm:w-16 sm:w-16" /> <b>{{message.username}}</b>:<span class="font-bold"> WYKONAŁ RZUT</span></p>
+																<p class="inline-block flex"><ProfileIconResized v-bind:profile_slug="null" v-bind:profile_image="message.thumbnail" class=" sm:w-16 sm:w-16" /> <b>{{message.username}}</b></p>
+																<p class="text-center"> <span class="font-bold"> WYKONAŁ RZUT</span> </p>
 																<p class="text-center font-bold"><span>Wynik: {{message.result}} </span></p> 
 																<p class="font-bold py-1 text-center" v-for="(roll, value) in message.rolls" :key="value"> <i class="fas fa-dice-d20"></i> {{roll}}:{{message.rolls_end[value]}} </p>
 															</p> 
@@ -69,12 +70,12 @@
                                                             
                                 </div>
                                                     
-                                        <div class="w-full md:w-9/12 mx-2 h-full  flex flex-col">
+                                        <div class="w-full md:w-9/12 mx-2 min-h-full  flex flex-col ">
                                                             
-                                            <div class="bg-white p-3 shadow-sm rounded-sm max-h-70">
+                                            <div class="bg-white p-3 shadow-sm rounded-sm max-h-70 border-b-4 border-purple-700 ">
                                                 <div class="flex text-center items-center space-x-2 font-semibold text-gray-900 leading-8 text-2xl">
                                                 
-                                                <span class="tracking-wide"> Handout</span>
+                                                <p class="w-full text-center text-md xl:text-3xl lg:text-2xl md:text-xl sm:text-md"> Handout </p>
                                                 </div>
                                                 <div class="text-gray-700 text-center">
                                                     <p class="text-2xl text-center font-bold break-words">
@@ -84,7 +85,7 @@
                                                                     
                                             </div>  
                                             <div class="my-4"></div>
-                                            <div class="bg-white mx-3 p-3 shadow-sm rounded-sm h-full w-full flex flex-col">
+                                            <div class="bg-white mx-3 p-3 shadow-sm rounded-sm min-h-full w-full flex flex-col">
                                                 <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8 text-3xl">
                                                 
                                                    
@@ -92,11 +93,11 @@
                                                 <div class="h-full min-w-full flex  ">
                                                    
                                                     <div  class="h-md rounded overflow-hidden flex  w-full shadow-lg  ">
-                                                        <div  class="min-w-full flex flex-col">
+                                                        <div  class="min-w-full h-full flex flex-col">
                                                             
-                                                            <img class="object-scale-down max-h-80 "
+                                                            <img class="object-scale-down max-h-full"
                                                             :src="showing_handout.get_image"
-                                                            alt="Sunset in the mountains">
+                                                            alt="Brak handoutów">
                                                             
                                                             
                                                         </div>

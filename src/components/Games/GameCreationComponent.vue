@@ -65,6 +65,7 @@ export default ({
             error: "",
             status: 0,
             response: {},
+            ok: false,
 
         }
     },
@@ -91,7 +92,7 @@ export default ({
             }
             fetch('http://localhost:8000/api/games/',requestOptions)
             .then((res => {
-                if(res.status == 200){
+                if(res.status == 201){
                     return res.json()
                 }else {
                    throw res
